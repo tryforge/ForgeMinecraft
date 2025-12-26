@@ -36,38 +36,42 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
     constructor(options = {}) {
         super();
         this.options = options;
-        if (options.server)
+        if (options.server) {
             options.server.port ??= 25565;
+            options.server.tls ??= true;
+        }
     }
     async init(client) {
         this.commands = new managers_1.MinecraftCommandManager(client);
         if (this.options.server?.token) {
-            const connection = await mc_server_management_1.WebSocketConnection.connect(`wss://${this.options.server.host}:${this.options.server.port}`, this.options.server.token).catch(noop_1.default);
-            if (connection)
-                this.server = new mc_server_management_1.MinecraftServer(connection);
-            const listen = (event, targetEvent = event) => {
-                this.server?.on(event, (data) => this.emitter.emit(targetEvent, data));
-            };
-            client.once("clientReady", () => {
-                listen("error");
-                listen(mc_server_management_1.Notifications.ALLOWLIST_ADDED, "allowListAdded");
-                listen(mc_server_management_1.Notifications.ALLOWLIST_REMOVED, "allowListRemoved");
-                listen(mc_server_management_1.Notifications.BAN_ADDED, "banAdded");
-                listen(mc_server_management_1.Notifications.BAN_REMOVED, "banRemoved");
-                listen(mc_server_management_1.Notifications.GAME_RULE_UPDATED, "gameRuleUpdated");
-                listen(mc_server_management_1.Notifications.IP_BAN_ADDED, "ipBanAdded");
-                listen(mc_server_management_1.Notifications.IP_BAN_REMOVED, "ipBanRemoved");
-                listen(mc_server_management_1.Notifications.OPERATOR_ADDED, "operatorAdded");
-                listen(mc_server_management_1.Notifications.OPERATOR_REMOVED, "operatorRemoved");
-                listen(mc_server_management_1.Notifications.PLAYER_JOINED, "playerJoined");
-                listen(mc_server_management_1.Notifications.PLAYER_LEFT, "playerLeft");
-                listen(mc_server_management_1.Notifications.SERVER_ACTIVITY, "serverActivity");
-                listen(mc_server_management_1.Notifications.SERVER_SAVED, "serverSaved");
-                listen(mc_server_management_1.Notifications.SERVER_SAVING, "serverSaving");
-                listen(mc_server_management_1.Notifications.SERVER_STARTED, "serverStarted");
-                listen(mc_server_management_1.Notifications.SERVER_STATUS, "serverStatus");
-                listen(mc_server_management_1.Notifications.SERVER_STOPPING, "serverStopping");
-            });
+            const connection = await mc_server_management_1.WebSocketConnection.connect(`${this.options.server.tls ? "wss" : "ws"}://${this.options.server.host}:${this.options.server.port}`, this.options.server.token).catch(noop_1.default);
+            if (connection) {
+                const server = new mc_server_management_1.MinecraftServer(connection);
+                this.server = server;
+                const listen = (event, targetEvent = event) => {
+                    server.on(event, (data) => this.emitter.emit(targetEvent, data));
+                };
+                client.once("clientReady", () => {
+                    listen("error");
+                    listen(mc_server_management_1.Notifications.ALLOWLIST_ADDED, "allowListAdded");
+                    listen(mc_server_management_1.Notifications.ALLOWLIST_REMOVED, "allowListRemoved");
+                    listen(mc_server_management_1.Notifications.BAN_ADDED, "banAdded");
+                    listen(mc_server_management_1.Notifications.BAN_REMOVED, "banRemoved");
+                    listen(mc_server_management_1.Notifications.GAME_RULE_UPDATED, "gameRuleUpdated");
+                    listen(mc_server_management_1.Notifications.IP_BAN_ADDED, "ipBanAdded");
+                    listen(mc_server_management_1.Notifications.IP_BAN_REMOVED, "ipBanRemoved");
+                    listen(mc_server_management_1.Notifications.OPERATOR_ADDED, "operatorAdded");
+                    listen(mc_server_management_1.Notifications.OPERATOR_REMOVED, "operatorRemoved");
+                    listen(mc_server_management_1.Notifications.PLAYER_JOINED, "playerJoined");
+                    listen(mc_server_management_1.Notifications.PLAYER_LEFT, "playerLeft");
+                    listen(mc_server_management_1.Notifications.SERVER_ACTIVITY, "serverActivity");
+                    listen(mc_server_management_1.Notifications.SERVER_SAVED, "serverSaved");
+                    listen(mc_server_management_1.Notifications.SERVER_SAVING, "serverSaving");
+                    listen(mc_server_management_1.Notifications.SERVER_STARTED, "serverStarted");
+                    listen(mc_server_management_1.Notifications.SERVER_STATUS, "serverStatus");
+                    listen(mc_server_management_1.Notifications.SERVER_STOPPING, "serverStopping");
+                });
+            }
         }
         forgescript_1.EventManager.load(constants_1.ForgeMinecraftEventHandlerName, __dirname + `/events`);
         this.load(__dirname + `/native`);

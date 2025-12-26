@@ -3,9 +3,24 @@ import { MinecraftServer } from "mc-server-management";
 import { MinecraftCommandManager } from "./managers";
 import { IMinecraftEvents } from "./handlers";
 export interface IMinecraftServerOptions {
+    /**
+     * The host domain of the server.
+     */
     host: string;
+    /**
+     * The port for the host connection.
+     * @default 25565
+     */
     port?: number;
+    /**
+     * The token needed to connect to the server.
+     */
     token?: string;
+    /**
+     * Whether TLS is enabled on the server. If TLS is disabled, this is required to specify to prevent errors on startup.
+     * @default true
+     */
+    tls?: boolean;
 }
 export interface IForgeMinecraftOptions {
     server?: IMinecraftServerOptions;
