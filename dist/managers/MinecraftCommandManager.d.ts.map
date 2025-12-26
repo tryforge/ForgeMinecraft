@@ -1,0 +1,1 @@
+{"version":3,"file":"MinecraftCommandManager.d.ts","sourceRoot":"","sources":["../../src/managers/MinecraftCommandManager.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,MAAM,uBAAuB,CAAA;AAC1D,OAAO,EAAE,gBAAgB,EAAE,MAAM,aAAa,CAAA;AAG9C,qBAAa,uBAAwB,SAAQ,kBAAkB,CAAC,MAAM,gBAAgB,CAAC;IACnF,WAAW,SAAiC;CAC/C"}
