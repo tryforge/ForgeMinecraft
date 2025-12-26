@@ -1,1 +1,1 @@
-{"version":3,"file":"getServerVersion.d.ts","sourceRoot":"","sources":["../../src/native/getServerVersion.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;AAE/D,oBAAY,eAAe;IACvB,IAAI,SAAS;IACb,QAAQ,aAAa;CACxB;;;;;;;;;;;;;;;AAED,wBA+BE"}
+{"version":3,"file":"getServerVersion.d.ts","sourceRoot":"","sources":["../../src/native/getServerVersion.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;AAE/D,oBAAY,eAAe;IACvB,IAAI,SAAS;IACb,QAAQ,aAAa;CACxB;;;;;;;;;;;;;;;AAED,wBAgCE"}

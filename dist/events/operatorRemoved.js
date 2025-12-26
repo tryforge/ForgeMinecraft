@@ -5,6 +5,7 @@ const handlers_1 = require("../handlers");
 const __1 = require("..");
 exports.default = new handlers_1.MinecraftEventHandler({
     name: "operatorRemoved",
+    version: "1.0.0",
     description: "This event is fired when an operator was removed",
     listener: async function (obj) {
         const commands = this.getExtension(__1.ForgeMinecraft, true).commands.get("operatorRemoved");

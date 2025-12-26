@@ -5,6 +5,7 @@ const handlers_1 = require("../handlers");
 const __1 = require("..");
 exports.default = new handlers_1.MinecraftEventHandler({
     name: "gameRuleUpdated",
+    version: "1.0.0",
     description: "This event is fired when a game rule was updated",
     listener: async function (obj) {
         const commands = this.getExtension(__1.ForgeMinecraft, true).commands.get("gameRuleUpdated");

@@ -9,6 +9,7 @@ var VersionProperty;
 })(VersionProperty || (exports.VersionProperty = VersionProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$getServerVersion",
+    version: "1.0.0",
     description: "Returns the version of a minecraft server",
     unwrap: true,
     brackets: false,

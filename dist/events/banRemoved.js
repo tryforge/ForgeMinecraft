@@ -5,6 +5,7 @@ const handlers_1 = require("../handlers");
 const __1 = require("..");
 exports.default = new handlers_1.MinecraftEventHandler({
     name: "banRemoved",
+    version: "1.0.0",
     description: "This event is fired when a player was unbanned",
     listener: async function (obj) {
         const commands = this.getExtension(__1.ForgeMinecraft, true).commands.get("banRemoved");

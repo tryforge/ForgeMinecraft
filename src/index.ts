@@ -5,6 +5,7 @@ import { description, version } from "../package.json"
 import { MinecraftCommandManager } from "./managers"
 import { IMinecraftEvents } from "./handlers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
+import noop from "./functions/noop"
 
 export interface IMinecraftServerOptions {
     host: string
@@ -43,13 +44,12 @@ export class ForgeMinecraft extends ForgeExtension {
             const connection = await WebSocketConnection.connect(
                 `wss://${this.options.server.host}:${this.options.server.port}`,
                 this.options.server.token
-            )
+            ).catch(noop)
 
-            const server = new MinecraftServer(connection)
-            this.server = server
+            if (connection) this.server = new MinecraftServer(connection)
 
             const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
-                server.on(event, (data) => this.emitter.emit(targetEvent, data))
+                this.server?.on(event, (data) => this.emitter.emit(targetEvent, data))
             }
 
             client.once("clientReady", () => {

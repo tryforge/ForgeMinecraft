@@ -5,6 +5,7 @@ const handlers_1 = require("../handlers");
 const __1 = require("..");
 exports.default = new handlers_1.MinecraftEventHandler({
     name: "allowListRemoved",
+    version: "1.0.0",
     description: "This event is fired when a player was removed from the allow list",
     listener: async function (obj) {
         const commands = this.getExtension(__1.ForgeMinecraft, true).commands.get("allowListRemoved");
