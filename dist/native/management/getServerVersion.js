@@ -10,13 +10,13 @@ var VersionProperty;
 exports.default = new forgescript_1.NativeFunction({
     name: "$getServerVersion",
     version: "1.0.0",
-    description: "Returns the version of a minecraft server",
+    description: "Returns current version of the minecraft server",
     unwrap: true,
     brackets: false,
     args: [
         {
             name: "force",
-            description: "Whether to force a direct fetch",
+            description: "Whether to force a direct fetch, defaults to false",
             rest: false,
             required: true,
             type: forgescript_1.ArgType.Boolean,
@@ -25,7 +25,6 @@ exports.default = new forgescript_1.NativeFunction({
             name: "property",
             description: "The property to return",
             rest: false,
-            required: false,
             type: forgescript_1.ArgType.Enum,
             enum: VersionProperty,
         }
@@ -35,7 +34,7 @@ exports.default = new forgescript_1.NativeFunction({
         forgescript_1.ArgType.String
     ],
     async execute(ctx, [force, prop]) {
-        const version = (await ctx.client.minecraft.server?.getStatus(force || false))?.version;
+        const version = (await ctx.client.minecraft.server?.getStatus(force || false).catch(ctx.noop))?.version;
         if (!version || prop)
             return this.success(version?.[prop]);
         return this.successJSON(version);

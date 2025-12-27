@@ -7,7 +7,7 @@ import { IMinecraftEvents } from "./handlers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
 import noop from "./functions/noop"
 
-export interface IMinecraftServerOptions {
+export interface IManagementServerOptions {
     /**
      * The host domain of the server.
      */
@@ -15,24 +15,17 @@ export interface IMinecraftServerOptions {
 
     /**
      * The port for the host connection.
-     * @default 25565
      */
-    port?: number
+    port: number
 
     /**
      * The token needed to connect to the server.
      */
     token?: string
-
-    /**
-     * Whether TLS is enabled on the server. If TLS is disabled, this is required to specify to prevent errors on startup.
-     * @default true
-     */
-    tls?: boolean
 }
 
 export interface IForgeMinecraftOptions {
-    server?: IMinecraftServerOptions
+    server?: IManagementServerOptions
     events?: Array<keyof IMinecraftEvents>
 }
 
@@ -52,10 +45,6 @@ export class ForgeMinecraft extends ForgeExtension {
 
     public constructor(public readonly options: IForgeMinecraftOptions = {}) {
         super()
-        if (options.server) {
-            options.server.port ??= 25565
-            options.server.tls ??= true
-        }
     }
 
     public async init(client: ForgeClient) {
@@ -63,7 +52,7 @@ export class ForgeMinecraft extends ForgeExtension {
 
         if (this.options.server?.token) {
             const connection = await WebSocketConnection.connect(
-                `${this.options.server.tls ? "wss" : "ws"}://${this.options.server.host}:${this.options.server.port}`,
+                `ws://${this.options.server.host}:${this.options.server.port}`,
                 this.options.server.token
             ).catch(noop)
 

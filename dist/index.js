@@ -36,15 +36,11 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
     constructor(options = {}) {
         super();
         this.options = options;
-        if (options.server) {
-            options.server.port ??= 25565;
-            options.server.tls ??= true;
-        }
     }
     async init(client) {
         this.commands = new managers_1.MinecraftCommandManager(client);
         if (this.options.server?.token) {
-            const connection = await mc_server_management_1.WebSocketConnection.connect(`${this.options.server.tls ? "wss" : "ws"}://${this.options.server.host}:${this.options.server.port}`, this.options.server.token).catch(noop_1.default);
+            const connection = await mc_server_management_1.WebSocketConnection.connect(`ws://${this.options.server.host}:${this.options.server.port}`, this.options.server.token).catch(noop_1.default);
             if (connection) {
                 const server = new mc_server_management_1.MinecraftServer(connection);
                 this.server = server;

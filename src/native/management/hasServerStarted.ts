@@ -9,7 +9,7 @@ export default new NativeFunction({
     args: [
         {
             name: "force",
-            description: "Whether to force a direct fetch",
+            description: "Whether to force a direct fetch, defaults to false",
             rest: false,
             required: true,
             type: ArgType.Boolean,
@@ -17,6 +17,6 @@ export default new NativeFunction({
     ],
     output: ArgType.Boolean,
     async execute(ctx, [force]) {
-        return this.success(!!(await ctx.client.minecraft.server?.getStatus(force || false))?.started)
+        return this.success(!!(await ctx.client.minecraft.server?.getStatus(force || false).catch(ctx.noop))?.started)
     }
 })
