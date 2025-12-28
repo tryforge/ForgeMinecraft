@@ -1,11 +1,10 @@
 import { EventManager, ForgeClient, ForgeExtension } from "@tryforge/forgescript"
-import { MinecraftServer, Notifications, WebSocketConnection } from "mc-server-management"
+import { MinecraftServer, Notifications } from "mc-server-management"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { description, version } from "../package.json"
-import { MinecraftCommandManager } from "./managers"
+import { MinecraftCommandManager, MinecraftConnectionManager } from "./managers"
 import { IMinecraftEvents } from "./handlers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
-import noop from "./functions/noop"
 
 export interface IManagementServerOptions {
     /**
@@ -21,7 +20,12 @@ export interface IManagementServerOptions {
     /**
      * The token needed to connect to the server.
      */
-    token?: string
+    token: string
+
+    /**
+     * The interval in ms used to reconnect to the server.
+     */
+    reconnectInterval: number
 }
 
 export interface IForgeMinecraftOptions {
@@ -40,6 +44,7 @@ export class ForgeMinecraft extends ForgeExtension {
 
     public server?: MinecraftServer
     public commands!: MinecraftCommandManager
+    private manager?: MinecraftConnectionManager
 
     private emitter = new TypedEmitter<TransformEvents<IMinecraftEvents>>()
 
@@ -50,41 +55,48 @@ export class ForgeMinecraft extends ForgeExtension {
     public async init(client: ForgeClient) {
         this.commands = new MinecraftCommandManager(client)
 
-        if (this.options.server?.token) {
-            const connection = await WebSocketConnection.connect(
-                `ws://${this.options.server.host}:${this.options.server.port}`,
-                this.options.server.token
-            ).catch(noop)
+        if (this.options.server) {
+            this.manager = new MinecraftConnectionManager(this.options.server)
 
-            if (connection) {
-                const server = new MinecraftServer(connection)
+            this.manager.on("connected", (server) => {
                 this.server = server
 
-                const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
-                    server.on(event, (data) => this.emitter.emit(targetEvent, data))
+                const attachListeners = () => {
+                    const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
+                        server.on(event, (data) => this.emitter.emit(targetEvent, data))
+                    }
+
+                    client.once("clientReady", () => {
+                        listen("error")
+                        listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
+                        listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
+                        listen(Notifications.BAN_ADDED, "banAdded")
+                        listen(Notifications.BAN_REMOVED, "banRemoved")
+                        listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
+                        listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
+                        listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
+                        listen(Notifications.OPERATOR_ADDED, "operatorAdded")
+                        listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
+                        listen(Notifications.PLAYER_JOINED, "playerJoined")
+                        listen(Notifications.PLAYER_LEFT, "playerLeft")
+                        listen(Notifications.SERVER_ACTIVITY, "serverActivity")
+                        listen(Notifications.SERVER_SAVED, "serverSaved")
+                        listen(Notifications.SERVER_SAVING, "serverSaving")
+                        listen(Notifications.SERVER_STARTED, "serverStarted")
+                        listen(Notifications.SERVER_STATUS, "serverStatus")
+                        listen(Notifications.SERVER_STOPPING, "serverStopping")
+                    })
                 }
 
-                client.once("clientReady", () => {
-                    listen("error")
-                    listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
-                    listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
-                    listen(Notifications.BAN_ADDED, "banAdded")
-                    listen(Notifications.BAN_REMOVED, "banRemoved")
-                    listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
-                    listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
-                    listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
-                    listen(Notifications.OPERATOR_ADDED, "operatorAdded")
-                    listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
-                    listen(Notifications.PLAYER_JOINED, "playerJoined")
-                    listen(Notifications.PLAYER_LEFT, "playerLeft")
-                    listen(Notifications.SERVER_ACTIVITY, "serverActivity")
-                    listen(Notifications.SERVER_SAVED, "serverSaved")
-                    listen(Notifications.SERVER_SAVING, "serverSaving")
-                    listen(Notifications.SERVER_STARTED, "serverStarted")
-                    listen(Notifications.SERVER_STATUS, "serverStatus")
-                    listen(Notifications.SERVER_STOPPING, "serverStopping")
-                })
-            }
+                if (client.isReady() as boolean) attachListeners()
+                else client.once("clientReady", attachListeners)
+            })
+
+            this.manager.on("disconnected", () => {
+                this.server = undefined
+            })
+
+            this.manager.start()
         }
 
         EventManager.load(ForgeMinecraftEventHandlerName, __dirname + `/events`)

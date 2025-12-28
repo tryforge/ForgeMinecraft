@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$saveServer",
-    description: "Saves the minecraft server, returns bool",
+    version: "1.0.0",
+    description: "Saves the minecraft server",
     unwrap: true,
     brackets: false,
     args: [
@@ -15,9 +16,9 @@ exports.default = new forgescript_1.NativeFunction({
             type: forgescript_1.ArgType.Boolean,
         }
     ],
-    output: forgescript_1.ArgType.Boolean,
     async execute(ctx, [flush]) {
-        return this.success(!!(await ctx.client.minecraft.server?.save(flush ?? true).catch(ctx.noop)));
+        await ctx.client.minecraft.server?.save(flush ?? true).catch(ctx.noop);
+        return this.success();
     }
 });
 //# sourceMappingURL=saveServer.js.map

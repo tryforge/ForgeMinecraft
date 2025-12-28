@@ -14,7 +14,11 @@ export interface IManagementServerOptions {
     /**
      * The token needed to connect to the server.
      */
-    token?: string;
+    token: string;
+    /**
+     * The interval in ms used to reconnect to the server.
+     */
+    reconnectInterval: number;
 }
 export interface IForgeMinecraftOptions {
     server?: IManagementServerOptions;
@@ -30,6 +34,7 @@ export declare class ForgeMinecraft extends ForgeExtension {
     version: string;
     server?: MinecraftServer;
     commands: MinecraftCommandManager;
+    private manager?;
     private emitter;
     constructor(options?: IForgeMinecraftOptions);
     init(client: ForgeClient): Promise<void>;

@@ -3,7 +3,7 @@ import { ArgType, NativeFunction } from "@tryforge/forgescript"
 export default new NativeFunction({
     name: "$saveServer",
     version: "1.0.0",
-    description: "Saves the minecraft server, returns bool",
+    description: "Saves the minecraft server",
     unwrap: true,
     brackets: false,
     args: [
@@ -15,8 +15,8 @@ export default new NativeFunction({
             type: ArgType.Boolean,
         }
     ],
-    output: ArgType.Boolean,
     async execute(ctx, [flush]) {
-        return this.success(!!(await ctx.client.minecraft.server?.save(flush ?? true).catch(ctx.noop)))
+        await ctx.client.minecraft.server?.save(flush ?? true).catch(ctx.noop)
+        return this.success()
     }
 })

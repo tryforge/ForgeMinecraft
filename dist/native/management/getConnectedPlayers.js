@@ -13,6 +13,7 @@ var PlayerProperty;
 })(PlayerProperty || (exports.PlayerProperty = PlayerProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$getConnectedPlayers",
+    version: "1.0.0",
     description: "Returns all connected players of the minecraft server",
     unwrap: true,
     brackets: false,
