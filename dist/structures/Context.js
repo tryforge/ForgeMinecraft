@@ -16,6 +16,9 @@ class Context extends forgescript_1.Context {
     get player() {
         return this.#cache.player ??= this.obj instanceof mc_server_management_1.Player ? this.obj : null;
     }
+    get operator() {
+        return this.#cache.operator ??= this.obj instanceof mc_server_management_1.Operator ? this.obj : null;
+    }
 }
 exports.Context = Context;
 //# sourceMappingURL=Context.js.map

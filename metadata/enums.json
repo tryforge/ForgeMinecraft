@@ -1,1 +1,1 @@
-{"PlayerProperty":["id","name"],"VersionProperty":["name","protocol"]}
+{"OperatorProperty":["permissionLevel","bypassesPlayerLimit","playerName","playerID"],"PlayerProperty":["id","name"],"GameRuleProperty":["key","value","type"],"VersionProperty":["name","protocol"]}

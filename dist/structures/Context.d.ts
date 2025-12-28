@@ -1,5 +1,5 @@
 import { Context as BaseContext, IContextCache, IRunnable, Sendable } from "@tryforge/forgescript";
-import { Player } from "mc-server-management";
+import { Operator, Player } from "mc-server-management";
 import { ForgeMinecraft } from "..";
 export type ExtendedSendable = Sendable | Player;
 export interface IExtendedRunnable extends IRunnable {
@@ -7,6 +7,7 @@ export interface IExtendedRunnable extends IRunnable {
 }
 export interface IExtendedContextCache extends IContextCache {
     player: Player | null;
+    operator: Operator | null;
 }
 export declare class Context extends BaseContext {
     #private;
@@ -14,10 +15,12 @@ export declare class Context extends BaseContext {
     constructor(runtime: IExtendedRunnable);
     get obj(): ExtendedSendable;
     get player(): Player | null;
+    get operator(): Operator | null;
 }
 declare module "@tryforge/forgescript" {
     interface Context {
         player: Player | null;
+        operator: Operator | null;
     }
     interface ForgeClient {
         minecraft: ForgeMinecraft;

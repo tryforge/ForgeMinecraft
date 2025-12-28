@@ -44,4 +44,5 @@ export * from "./handlers";
 export * from "./managers";
 export * from "./structures";
 export * from "./constants";
+export * from "./types";
 //# sourceMappingURL=index.d.ts.map
