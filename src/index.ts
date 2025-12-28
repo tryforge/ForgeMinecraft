@@ -24,8 +24,9 @@ export interface IManagementServerOptions {
 
     /**
      * The interval in ms used to reconnect to the server.
+     * @default 60_000
      */
-    reconnectInterval: number
+    reconnectInterval?: number
 }
 
 export interface IForgeMinecraftOptions {
@@ -50,6 +51,7 @@ export class ForgeMinecraft extends ForgeExtension {
 
     public constructor(public readonly options: IForgeMinecraftOptions = {}) {
         super()
+        if (options.server) options.server.reconnectInterval ??= 60_000
     }
 
     public async init(client: ForgeClient) {

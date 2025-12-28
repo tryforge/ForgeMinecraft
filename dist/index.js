@@ -33,6 +33,8 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
     constructor(options = {}) {
         super();
         this.options = options;
+        if (options.server)
+            options.server.reconnectInterval ??= 60_000;
     }
     async init(client) {
         this.commands = new managers_1.MinecraftCommandManager(client);

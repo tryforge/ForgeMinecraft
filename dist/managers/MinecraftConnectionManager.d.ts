@@ -10,8 +10,6 @@ export declare class MinecraftConnectionManager extends TypedEmitter<IConnection
     private connection?;
     private server?;
     private reconnectTimer?;
-    private attempts;
-    private readonly interval;
     constructor(options: IManagementServerOptions);
     /**
      * Gets the active MinecraftServer instance.

@@ -17,8 +17,9 @@ export interface IManagementServerOptions {
     token: string;
     /**
      * The interval in ms used to reconnect to the server.
+     * @default 60_000
      */
-    reconnectInterval: number;
+    reconnectInterval?: number;
 }
 export interface IForgeMinecraftOptions {
     server?: IManagementServerOptions;
