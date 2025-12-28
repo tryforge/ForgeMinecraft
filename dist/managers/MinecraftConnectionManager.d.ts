@@ -14,9 +14,9 @@ export declare class MinecraftConnectionManager extends TypedEmitter<IConnection
     private readonly interval;
     constructor(options: IManagementServerOptions);
     /**
-    * Gets the active MinecraftServer instance.
-    * @returns
-    */
+     * Gets the active MinecraftServer instance.
+     * @returns
+     */
     getServer(): MinecraftServer | undefined;
     /**
      * Returns whether a connection exists.
@@ -24,14 +24,14 @@ export declare class MinecraftConnectionManager extends TypedEmitter<IConnection
      */
     isConnected(): boolean;
     /**
-    * Starts/Restarts the connection loop.
-    * @returns
-    */
+     * Starts/Restarts the connection loop.
+     * @returns
+     */
     start(): void;
     /**
-    * Stops reconnecting and closes the connection.
-    * @returns
-    */
+     * Stops reconnecting and closes the connection.
+     * @returns
+     */
     stop(): void;
     /**
      * Establishes a connection to the server.

@@ -21,9 +21,9 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
         this.interval = options.reconnectInterval ?? 60_000;
     }
     /**
-    * Gets the active MinecraftServer instance.
-    * @returns
-    */
+     * Gets the active MinecraftServer instance.
+     * @returns
+     */
     getServer() {
         return this.server;
     }
@@ -35,18 +35,18 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
         return !!this.connection;
     }
     /**
-    * Starts/Restarts the connection loop.
-    * @returns
-    */
+     * Starts/Restarts the connection loop.
+     * @returns
+     */
     start() {
         if (this.connection || this.reconnectTimer)
             return;
         void this._connect();
     }
     /**
-    * Stops reconnecting and closes the connection.
-    * @returns
-    */
+     * Stops reconnecting and closes the connection.
+     * @returns
+     */
     stop() {
         if (this.reconnectTimer) {
             clearTimeout(this.reconnectTimer);

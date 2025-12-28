@@ -23,9 +23,9 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
     }
 
     /**
-    * Gets the active MinecraftServer instance.
-    * @returns 
-    */
+     * Gets the active MinecraftServer instance.
+     * @returns 
+     */
     public getServer() {
         return this.server
     }
@@ -39,18 +39,18 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
     }
 
     /**
-    * Starts/Restarts the connection loop.
-    * @returns 
-    */
+     * Starts/Restarts the connection loop.
+     * @returns 
+     */
     public start() {
         if (this.connection || this.reconnectTimer) return
         void this._connect()
     }
 
     /**
-    * Stops reconnecting and closes the connection.
-    * @returns 
-    */
+     * Stops reconnecting and closes the connection.
+     * @returns 
+     */
     public stop() {
         if (this.reconnectTimer) {
             clearTimeout(this.reconnectTimer)
