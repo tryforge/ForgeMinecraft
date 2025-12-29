@@ -29,7 +29,10 @@ exports.default = new forgescript_1.NativeFunction({
     ],
     output: forgescript_1.ArgType.Number,
     async execute(ctx, [msg, players]) {
-        const result = await ctx.client.minecraft.server?.kickPlayers(players.map((x) => (0, parsePlayer_1.default)(x)), msg || undefined).catch(ctx.noop);
+        const result = await ctx.client.minecraft.server?.kickPlayers(players.map((x) => (0, parsePlayer_1.default)(x)), msg || undefined).catch((err) => {
+            if (err?.code !== -32603)
+                ctx.noop(err);
+        });
         return this.success(result?.length || 0);
     }
 });

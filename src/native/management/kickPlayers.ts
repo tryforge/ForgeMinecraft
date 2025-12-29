@@ -28,7 +28,9 @@ export default new NativeFunction({
         const result = await ctx.client.minecraft.server?.kickPlayers(
             players.map((x) => parsePlayer(x)),
             msg || undefined
-        ).catch(ctx.noop)
+        ).catch((err) => {
+            if (err?.code !== -32603) ctx.noop(err)
+        })
 
         return this.success(result?.length || 0)
     }
