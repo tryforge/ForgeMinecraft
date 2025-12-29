@@ -1,7 +1,5 @@
-import { GameRuleType } from "../types"
+import { EnumLike } from "@tryforge/forgescript"
 
-type GameRuleTypeName = keyof typeof GameRuleType
-
-export function convertGameRuleType(value: string) {
-    return (Object.keys(GameRuleType) as GameRuleTypeName[]).find((key) => GameRuleType[key] === value)
+export default function<Enum extends EnumLike>(en: Enum, value: string) {
+    return (Object.keys(en) as (keyof Enum)[]).find((key) => en[key] === value)
 }

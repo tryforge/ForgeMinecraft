@@ -7,6 +7,7 @@ export default new NativeFunction({
     description: "Kicks players from the minecraft server, returns number of kicked players",
     unwrap: true,
     brackets: true,
+    experimental: true,
     args: [
         {
             name: "message",
