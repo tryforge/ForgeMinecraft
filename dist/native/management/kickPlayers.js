@@ -1,8 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
+const parsePlayer_1 = __importDefault(require("../../functions/parsePlayer"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$kickPlayers",
+    version: "1.0.0",
     description: "Kicks players from the minecraft server, returns number of kicked players",
     unwrap: true,
     brackets: true,
@@ -24,7 +29,7 @@ exports.default = new forgescript_1.NativeFunction({
     ],
     output: forgescript_1.ArgType.Number,
     async execute(ctx, [msg, players]) {
-        const result = await ctx.client.minecraft.server?.kickPlayers(players, msg || undefined).catch(ctx.noop);
+        const result = await ctx.client.minecraft.server?.kickPlayers(players.map((x) => (0, parsePlayer_1.default)(x)), msg || undefined).catch(ctx.noop);
         return this.success(result?.length || 0);
     }
 });

@@ -1,4 +1,5 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript"
+import parsePlayer from "../../functions/parsePlayer"
 
 export default new NativeFunction({
     name: "$sendSystemMessage",
@@ -32,7 +33,7 @@ export default new NativeFunction({
         return this.success(!!(
             await ctx.client.minecraft.server?.sendSystemMessage(
                 msg,
-                players || undefined,
+                players?.length ? players.map((x) => parsePlayer(x)) : undefined,
                 overlay || undefined
             ).catch(ctx.noop)
         ))

@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const serverState_1 = require("../../properties/serverState");
 exports.default = new forgescript_1.NativeFunction({
     name: "$serverState",
+    version: "1.0.0",
     description: "Retrieves data from an event whose context was a server status event",
     unwrap: true,
     brackets: false,

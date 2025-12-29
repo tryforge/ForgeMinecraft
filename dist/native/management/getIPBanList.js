@@ -8,6 +8,7 @@ const ban_1 = require("../../properties/ban");
 const array_1 = __importDefault(require("../../functions/array"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$getIPBanList",
+    version: "1.0.0",
     description: "Returns the server's IP ban list",
     unwrap: true,
     brackets: false,

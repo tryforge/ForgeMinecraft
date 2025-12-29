@@ -1,4 +1,5 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript"
+import parsePlayer from "../../functions/parsePlayer"
 
 export default new NativeFunction({
     name: "$kickPlayers",
@@ -24,7 +25,11 @@ export default new NativeFunction({
     ],
     output: ArgType.Number,
     async execute(ctx, [msg, players]) {
-        const result = await ctx.client.minecraft.server?.kickPlayers(players, msg || undefined).catch(ctx.noop)
+        const result = await ctx.client.minecraft.server?.kickPlayers(
+            players.map((x) => parsePlayer(x)),
+            msg || undefined
+        ).catch(ctx.noop)
+
         return this.success(result?.length || 0)
     }
 })

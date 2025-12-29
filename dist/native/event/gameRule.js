@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const gameRule_1 = require("../../properties/gameRule");
 exports.default = new forgescript_1.NativeFunction({
     name: "$gameRule",
+    version: "1.0.0",
     description: "Retrieves data from an event whose context was a game rule event",
     unwrap: true,
     brackets: false,

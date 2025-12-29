@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const ban_1 = require("../../properties/ban");
 exports.default = new forgescript_1.NativeFunction({
     name: "$playerBan",
+    version: "1.0.0",
     description: "Retrieves data from an event whose context was a player ban event",
     unwrap: true,
     brackets: false,
