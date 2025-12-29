@@ -8,6 +8,7 @@ const operator_1 = require("../../properties/operator");
 const array_1 = __importDefault(require("../../functions/array"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$getOperatorList",
+    version: "1.0.0",
     description: "Returns the server's operator list",
     unwrap: true,
     brackets: false,
@@ -28,7 +29,7 @@ exports.default = new forgescript_1.NativeFunction({
         },
         {
             name: "separator",
-            description: "The separator to use for each property",
+            description: "The separator to use for each value",
             rest: false,
             type: forgescript_1.ArgType.String,
         }

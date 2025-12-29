@@ -1,1 +1,1 @@
-{"version":3,"file":"ipBanRemoved.d.ts","sourceRoot":"","sources":["../../src/events/ipBanRemoved.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,qBAAqB,EAAE,MAAM,aAAa,CAAA;;AAGnD,wBAkBE"}
+{"version":3,"file":"ipBanRemoved.d.ts","sourceRoot":"","sources":["../../src/events/ipBanRemoved.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,qBAAqB,EAAE,MAAM,aAAa,CAAA;;AAInD,wBAmBE"}

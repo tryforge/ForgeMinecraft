@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const operator_1 = require("../../properties/operator");
 exports.default = new forgescript_1.NativeFunction({
     name: "$operator",
+    version: "1.0.0",
     description: "Retrieves data from an event whose context was an operator event",
     unwrap: true,
     brackets: false,

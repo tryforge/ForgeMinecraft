@@ -25,7 +25,7 @@ export default new NativeFunction({
         },
         {
             name: "separator",
-            description: "The separator to use for each property",
+            description: "The separator to use for each value",
             rest: false,
             type: ArgType.String,
         }

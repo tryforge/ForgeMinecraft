@@ -9,7 +9,7 @@ export enum PlayerProperty {
 export default new NativeFunction({
     name: "$getConnectedPlayers",
     version: "1.0.0",
-    description: "Returns all connected players of the minecraft server",
+    description: "Returns the server's currently connected players",
     unwrap: true,
     brackets: false,
     args: [
@@ -29,7 +29,7 @@ export default new NativeFunction({
         },
         {
             name: "separator",
-            description: "The separator to use for each player",
+            description: "The separator to use for each value",
             rest: false,
             type: ArgType.String,
         }

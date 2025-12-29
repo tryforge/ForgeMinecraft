@@ -8,6 +8,7 @@ const gameRule_1 = require("../../properties/gameRule");
 const array_1 = __importDefault(require("../../functions/array"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$getGameRules",
+    version: "1.0.0",
     description: "Returns the server's game rules",
     unwrap: true,
     brackets: false,
@@ -28,7 +29,7 @@ exports.default = new forgescript_1.NativeFunction({
         },
         {
             name: "separator",
-            description: "The separator to use for each property",
+            description: "The separator to use for each value",
             rest: false,
             type: forgescript_1.ArgType.String,
         }
@@ -38,12 +39,10 @@ exports.default = new forgescript_1.NativeFunction({
         (0, array_1.default)()
     ],
     async execute(ctx, [force, prop, sep]) {
-        const rules = await ctx.client.minecraft.server?.getGameRules(force || false).catch(ctx.noop);
-        if (!rules || prop) {
-            return this.success(Array.from(rules?.values() || [])
-                .map((x) => gameRule_1.GameRuleProperties[prop](x))
-                .join(sep ?? ", "));
-        }
+        const map = await ctx.client.minecraft.server?.getGameRules(force || false).catch(ctx.noop);
+        const rules = Array.from(map?.values() || []);
+        if (!map || prop)
+            return this.success(rules.map((x) => gameRule_1.GameRuleProperties[prop](x)).join(sep ?? ", "));
         return this.successJSON(rules);
     }
 });

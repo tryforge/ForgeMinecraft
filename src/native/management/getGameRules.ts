@@ -25,7 +25,7 @@ export default new NativeFunction({
         },
         {
             name: "separator",
-            description: "The separator to use for each property",
+            description: "The separator to use for each value",
             rest: false,
             type: ArgType.String,
         }
@@ -35,14 +35,9 @@ export default new NativeFunction({
         array<ArgType.Unknown>()
     ],
     async execute(ctx, [force, prop, sep]) {
-        const rules = await ctx.client.minecraft.server?.getGameRules(force || false).catch(ctx.noop)
-        if (!rules || prop) {
-            return this.success(
-                Array.from(rules?.values() || [])
-                    .map((x) => GameRuleProperties[prop!](x))
-                    .join(sep ?? ", ")
-            )
-        }
+        const map = await ctx.client.minecraft.server?.getGameRules(force || false).catch(ctx.noop)
+        const rules = Array.from(map?.values() || [])
+        if (!map || prop) return this.success(rules.map((x) => GameRuleProperties[prop!](x)).join(sep ?? ", "))
         return this.successJSON(rules)
     }
 })

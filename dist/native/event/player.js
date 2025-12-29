@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const getConnectedPlayers_1 = require("../management/getConnectedPlayers");
 exports.default = new forgescript_1.NativeFunction({
     name: "$player",
+    version: "1.0.0",
     description: "Retrieves data from an event whose context was a player event",
     unwrap: true,
     brackets: false,

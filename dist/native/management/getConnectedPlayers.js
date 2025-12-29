@@ -14,7 +14,7 @@ var PlayerProperty;
 exports.default = new forgescript_1.NativeFunction({
     name: "$getConnectedPlayers",
     version: "1.0.0",
-    description: "Returns all connected players of the minecraft server",
+    description: "Returns the server's currently connected players",
     unwrap: true,
     brackets: false,
     args: [
@@ -34,7 +34,7 @@ exports.default = new forgescript_1.NativeFunction({
         },
         {
             name: "separator",
-            description: "The separator to use for each player",
+            description: "The separator to use for each value",
             rest: false,
             type: forgescript_1.ArgType.String,
         }
