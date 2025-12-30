@@ -1,7 +1,7 @@
 {
   "name": "forge.minecraft",
   "version": "1.0.0",
-  "description": "",
+  "description": "ForgeMinecraft is an extension that provides real-time Minecraft server management via the management server protocol, alongside various functions for retrieving status and metadata from Java and Bedrock servers.",
   "main": "dist/index.js",
   "scripts": {
     "docgen": "tsc && typedoc src/index.ts && node dist/docgen",

@@ -22,6 +22,7 @@ exports.default = new forgescript_1.NativeFunction({
             type: forgescript_1.ArgType.Number,
         }
     ],
+    output: forgescript_1.ArgType.Attachment,
     async execute(ctx, [host, port]) {
         const icon = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.icon;
         if (icon) {

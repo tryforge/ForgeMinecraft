@@ -1,5 +1,5 @@
-import { EventManager, ForgeClient, ForgeExtension } from "@tryforge/forgescript"
-import { MinecraftServer, Notifications } from "mc-server-management"
+import { EventManager, ForgeClient, ForgeExtension, Logger } from "@tryforge/forgescript"
+import { MinecraftServer, Notifications, WebSocketConnection } from "mc-server-management"
 import { statusBedrock, statusJava } from "node-mcstatus"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { description, version } from "../package.json"
@@ -24,10 +24,22 @@ export interface IManagementServerOptions {
     token: string
 
     /**
+     * Whether to automatically reconnect to the server if the connection is lost.
+     * @default true
+     */
+    reconnect?: boolean
+
+    /**
      * The interval in ms used to reconnect to the server.
-     * @default 60_000
+     * @default 1000
      */
     reconnectInterval?: number
+
+    /**
+     * The maximum number of times to attempt to reconnect to the server. Set to `0` for infinite attempts.
+     * @default 5
+     */
+    maxReconnectAttempts?: number
 }
 
 export interface IJavaServerOptions {
@@ -95,7 +107,6 @@ export class ForgeMinecraft extends ForgeExtension {
 
     public constructor(public readonly options: IForgeMinecraftOptions = {}) {
         super()
-        if (options.server) options.server.reconnectInterval ??= 60_000
     }
 
     /**
@@ -132,45 +143,56 @@ export class ForgeMinecraft extends ForgeExtension {
         this.commands = new MinecraftCommandManager(client)
 
         if (this.options.server) {
-            this.manager = new MinecraftConnectionManager(this.options.server)
+            Logger.info("[ForgeMinecraft] Connecting to management server...")
 
-            this.manager.on("connected", (server) => {
-                this.server = server
+            const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options.server
+            const connection = await WebSocketConnection.connect(`ws://${host}:${port}`, token, {
+                reconnect,
+                reconnect_interval: reconnectInterval,
+                max_reconnects: maxReconnectAttempts
+            }).catch(() => { })
 
-                const attachListeners = () => {
-                    const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
-                        server.on(event, (data) => this.emitter.emit(targetEvent, data))
+            if (connection) {
+                connection.on("open", () => {
+                    this.server = new MinecraftServer(connection)
+                    Logger.info("[ForgeMinecraft] Management connection established.")
+
+                    const attachListeners = () => {
+                        const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
+                            this.server!.on(event, (data) => this.emitter.emit(targetEvent, data))
+                        }
+
+                        listen("error")
+                        listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
+                        listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
+                        listen(Notifications.BAN_ADDED, "banAdded")
+                        listen(Notifications.BAN_REMOVED, "banRemoved")
+                        listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
+                        listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
+                        listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
+                        listen(Notifications.OPERATOR_ADDED, "operatorAdded")
+                        listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
+                        listen(Notifications.PLAYER_JOINED, "playerJoined")
+                        listen(Notifications.PLAYER_LEFT, "playerLeft")
+                        listen(Notifications.SERVER_ACTIVITY, "serverActivity")
+                        listen(Notifications.SERVER_SAVED, "serverSaved")
+                        listen(Notifications.SERVER_SAVING, "serverSaving")
+                        listen(Notifications.SERVER_STARTED, "serverStarted")
+                        listen(Notifications.SERVER_STATUS, "serverStatus")
+                        listen(Notifications.SERVER_STOPPING, "serverStopping")
                     }
 
-                    listen("error")
-                    listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
-                    listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
-                    listen(Notifications.BAN_ADDED, "banAdded")
-                    listen(Notifications.BAN_REMOVED, "banRemoved")
-                    listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
-                    listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
-                    listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
-                    listen(Notifications.OPERATOR_ADDED, "operatorAdded")
-                    listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
-                    listen(Notifications.PLAYER_JOINED, "playerJoined")
-                    listen(Notifications.PLAYER_LEFT, "playerLeft")
-                    listen(Notifications.SERVER_ACTIVITY, "serverActivity")
-                    listen(Notifications.SERVER_SAVED, "serverSaved")
-                    listen(Notifications.SERVER_SAVING, "serverSaving")
-                    listen(Notifications.SERVER_STARTED, "serverStarted")
-                    listen(Notifications.SERVER_STATUS, "serverStatus")
-                    listen(Notifications.SERVER_STOPPING, "serverStopping")
-                }
+                    if (client.isReady() as boolean) attachListeners()
+                    else client.once("clientReady", attachListeners)
+                })
 
-                if (client.isReady() as boolean) attachListeners()
-                else client.once("clientReady", attachListeners)
-            })
-
-            this.manager.on("disconnected", () => {
-                this.server = undefined
-            })
-
-            this.manager.start()
+                connection.on("close", () => {
+                    Logger.warn("[ForgeMinecraft] Management connection closed.")
+                    this.server = undefined
+                })
+            } else {
+                Logger.warn("[ForgeMinecraft] Management connection could not be established.")
+            }
         }
 
         EventManager.load(ForgeMinecraftEventHandlerName, __dirname + `/events`)

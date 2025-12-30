@@ -21,6 +21,7 @@ export default new NativeFunction({
             type: ArgType.Number,
         }
     ],
+    output: ArgType.Attachment,
     async execute(ctx, [host, port]) {
         const icon = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.icon
         if (icon) {

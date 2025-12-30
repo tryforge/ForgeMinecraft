@@ -3,7 +3,7 @@
 <img height="150" width="150" src="https://raw.githubusercontent.com/tryforge/ForgeMinecraft/main/assets/ForgeMinecraft.png" alt="ForgeMinecraft">
 
 # ForgeMinecraft
-desc
+ForgeMinecraft is an extension that provides real-time Minecraft server management via the management server protocol, alongside various functions for retrieving status and metadata from Java and Bedrock servers.
 
 <a href="https://github.com/tryforge/ForgeMinecraft/"><img src="https://img.shields.io/github/package-json/v/tryforge/ForgeMinecraft/main?label=@tryforge/forge.minecraft&color=5c16d4" alt="@tryforge/forge.minecraft"></a>
 <a href="https://github.com/tryforge/ForgeScript/"><img src="https://img.shields.io/github/package-json/v/tryforge/ForgeScript/main?label=@tryforge/forgescript&color=5c16d4" alt="@tryforge/forgescript"></a>
@@ -16,7 +16,8 @@ desc
 ## Contents
 
 1. [Installation](#installation)
-2. [Documentation](https://docs.botforge.org/p/ForgeMinecraft/)
+2. [Management Server](#management-server)
+3. [Documentation](https://docs.botforge.org/p/ForgeMinecraft/)
 
 <h3 align="center">Installation</h3><hr>
 
@@ -57,3 +58,6 @@ desc
 
     > ℹ️ **Note**\
     > View all available client options [here](https://tryforge.github.io/ForgeMinecraft/interfaces/IForgeMinecraftOptions.html).
+
+<h3 align="center">Management Server</h3><hr>
+

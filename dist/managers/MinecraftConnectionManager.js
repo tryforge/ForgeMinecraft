@@ -58,8 +58,12 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
     async _connect() {
         try {
             forgescript_1.Logger.info("[ForgeMinecraft] Connecting to management server...");
-            const { host, port, token } = this.options;
-            const connection = await mc_server_management_1.WebSocketConnection.connect(`ws://${host}:${port}`, token).catch(() => { });
+            const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options;
+            const connection = await mc_server_management_1.WebSocketConnection.connect(`ws://${host}:${port}`, token, {
+                reconnect,
+                reconnect_interval: reconnectInterval,
+                max_reconnects: maxReconnectAttempts
+            }).catch(() => { });
             if (!connection) {
                 forgescript_1.Logger.warn("[ForgeMinecraft] Management connection could not be established.");
                 return this._scheduleReconnect();

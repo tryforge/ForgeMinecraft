@@ -68,8 +68,12 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         try {
             Logger.info("[ForgeMinecraft] Connecting to management server...")
 
-            const { host, port, token } = this.options
-            const connection = await WebSocketConnection.connect(`ws://${host}:${port}`, token).catch(() => { })
+            const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options
+            const connection = await WebSocketConnection.connect(`ws://${host}:${port}`, token, {
+                reconnect,
+                reconnect_interval: reconnectInterval,
+                max_reconnects: maxReconnectAttempts
+            }).catch(() => { })
 
             if (!connection) {
                 Logger.warn("[ForgeMinecraft] Management connection could not be established.")

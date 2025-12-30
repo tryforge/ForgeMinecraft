@@ -16,10 +16,20 @@ export interface IManagementServerOptions {
      */
     token: string;
     /**
+     * Whether to automatically reconnect to the server if the connection is lost.
+     * @default true
+     */
+    reconnect?: boolean;
+    /**
      * The interval in ms used to reconnect to the server.
-     * @default 60_000
+     * @default 1000
      */
     reconnectInterval?: number;
+    /**
+     * The maximum number of times to attempt to reconnect to the server. Set to `0` for infinite attempts.
+     * @default 5
+     */
+    maxReconnectAttempts?: number;
 }
 export interface IJavaServerOptions {
     /**
