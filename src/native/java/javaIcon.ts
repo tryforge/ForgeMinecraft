@@ -4,7 +4,7 @@ import { AttachmentBuilder } from "discord.js"
 export default new NativeFunction({
     name: "$javaIcon",
     version: "1.0.0",
-    description: "Returns the icon of a java server",
+    description: "Returns the icon of a java server as attachment",
     unwrap: true,
     brackets: false,
     args: [
@@ -21,11 +21,11 @@ export default new NativeFunction({
             type: ArgType.Number,
         }
     ],
-    output: ArgType.URL,
     async execute(ctx, [host, port]) {
         const icon = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.icon
         if (icon) {
-            ctx.container.files.push(new AttachmentBuilder(Buffer.from(icon.split(",")[1], "base64")).setName("icon.png"))
+            const buffer = Buffer.from(icon.split(",")[1], "base64")
+            ctx.container.files.push(new AttachmentBuilder(buffer).setName("icon.png"))
         }
         return this.success()
     }

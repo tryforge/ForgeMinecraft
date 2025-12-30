@@ -105,7 +105,7 @@ export class ForgeMinecraft extends ForgeExtension {
      * @returns 
      */
     public async getJavaStatus(host?: string | null, port?: number) {
-        host ??= this.options.java?.host
+        host ||= this.options.java?.host
         port ??= this.options.java?.port
 
         if (!host) return null
@@ -119,7 +119,7 @@ export class ForgeMinecraft extends ForgeExtension {
      * @returns 
      */
     public async getBedrockStatus(host?: string | null, port?: number) {
-        host ??= this.options.bedrock?.host
+        host ||= this.options.bedrock?.host
         port ??= this.options.bedrock?.port
 
         if (!host) return null

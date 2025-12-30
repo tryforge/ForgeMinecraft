@@ -5,7 +5,7 @@ const discord_js_1 = require("discord.js");
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaIcon",
     version: "1.0.0",
-    description: "Returns the icon of a java server",
+    description: "Returns the icon of a java server as attachment",
     unwrap: true,
     brackets: false,
     args: [
@@ -22,11 +22,11 @@ exports.default = new forgescript_1.NativeFunction({
             type: forgescript_1.ArgType.Number,
         }
     ],
-    output: forgescript_1.ArgType.URL,
     async execute(ctx, [host, port]) {
         const icon = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.icon;
         if (icon) {
-            ctx.container.files.push(new discord_js_1.AttachmentBuilder(Buffer.from(icon.split(",")[1], "base64")).setName("icon.png"));
+            const buffer = Buffer.from(icon.split(",")[1], "base64");
+            ctx.container.files.push(new discord_js_1.AttachmentBuilder(buffer).setName("icon.png"));
         }
         return this.success();
     }
