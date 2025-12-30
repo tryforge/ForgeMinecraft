@@ -1,6 +1,6 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript"
 
-export enum JavaMOTDProperty {
+export enum MOTDProperty {
     Raw = "raw",
     Clean = "clean",
     Html = "html",
@@ -18,7 +18,7 @@ export default new NativeFunction({
             description: "The property to return",
             rest: false,
             type: ArgType.Enum,
-            enum: JavaMOTDProperty,
+            enum: MOTDProperty,
         },
         {
             name: "host",

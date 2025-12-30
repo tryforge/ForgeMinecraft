@@ -7,6 +7,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const parsePlayer_1 = __importDefault(require("../../functions/parsePlayer"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$removePlayerBans",
+    version: "1.0.0",
     description: "Removes players from the server's ban list, returns bool",
     aliases: ["$removePlayerBan"],
     unwrap: true,

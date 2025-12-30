@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JavaMOTDProperty = void 0;
+exports.MOTDProperty = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
-var JavaMOTDProperty;
-(function (JavaMOTDProperty) {
-    JavaMOTDProperty["Raw"] = "raw";
-    JavaMOTDProperty["Clean"] = "clean";
-    JavaMOTDProperty["Html"] = "html";
-})(JavaMOTDProperty || (exports.JavaMOTDProperty = JavaMOTDProperty = {}));
+var MOTDProperty;
+(function (MOTDProperty) {
+    MOTDProperty["Raw"] = "raw";
+    MOTDProperty["Clean"] = "clean";
+    MOTDProperty["Html"] = "html";
+})(MOTDProperty || (exports.MOTDProperty = MOTDProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaMOTD",
+    version: "1.0.0",
     description: "Returns the message of the day (MOTD) from a java server",
     unwrap: true,
     brackets: false,
@@ -19,7 +20,7 @@ exports.default = new forgescript_1.NativeFunction({
             description: "The property to return",
             rest: false,
             type: forgescript_1.ArgType.Enum,
-            enum: JavaMOTDProperty,
+            enum: MOTDProperty,
         },
         {
             name: "host",

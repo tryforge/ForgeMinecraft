@@ -11,6 +11,7 @@ var JavaVersionProperty;
 })(JavaVersionProperty || (exports.JavaVersionProperty = JavaVersionProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaVersion",
+    version: "1.0.0",
     description: "Returns the version of a java server",
     unwrap: true,
     brackets: false,

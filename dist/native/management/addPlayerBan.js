@@ -7,6 +7,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const parsePlayer_1 = __importDefault(require("../../functions/parsePlayer"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$addPlayerBan",
+    version: "1.0.0",
     description: "Adds a player to the server's ban list, returns bool",
     unwrap: true,
     brackets: true,

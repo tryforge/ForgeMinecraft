@@ -5,7 +5,7 @@ import { description, version } from "../package.json"
 import { MinecraftCommandManager, MinecraftConnectionManager } from "./managers"
 import { IMinecraftEvents } from "./handlers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
-import { statusJava } from "node-mcstatus"
+import { statusBedrock, statusJava } from "node-mcstatus"
 
 export interface IManagementServerOptions {
     /**
@@ -43,10 +43,24 @@ export interface IJavaServerOptions {
     port?: number
 }
 
+export interface IBedrockServerOptions {
+    /**
+     * The host domain of the server.
+     */
+    host: string
+
+    /**
+     * The port for the host connection.
+     * @default 19132
+     */
+    port?: number
+}
+
 export interface IForgeMinecraftOptions {
     events?: Array<keyof IMinecraftEvents>
     server?: IManagementServerOptions
     java?: IJavaServerOptions
+    bedrock?: IBedrockServerOptions
 }
 
 export type TransformEvents<T> = {
@@ -75,6 +89,14 @@ export class ForgeMinecraft extends ForgeExtension {
 
         if (!host) return null
         return await statusJava(host, port)
+    }
+
+    public async getBedrockStatus(host?: string | null, port?: number) {
+        host ??= this.options.bedrock?.host
+        port ??= this.options.bedrock?.port
+
+        if (!host) return null
+        return await statusBedrock(host, port)
     }
 
     public async init(client: ForgeClient) {

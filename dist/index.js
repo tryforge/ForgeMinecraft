@@ -44,6 +44,13 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
             return null;
         return await (0, node_mcstatus_1.statusJava)(host, port);
     }
+    async getBedrockStatus(host, port) {
+        host ??= this.options.bedrock?.host;
+        port ??= this.options.bedrock?.port;
+        if (!host)
+            return null;
+        return await (0, node_mcstatus_1.statusBedrock)(host, port);
+    }
     async init(client) {
         this.commands = new managers_1.MinecraftCommandManager(client);
         if (this.options.server) {

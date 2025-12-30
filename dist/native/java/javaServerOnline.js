@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaServerOnline",
+    version: "1.0.0",
     description: "Returns whether a java server is online",
     unwrap: true,
     brackets: false,

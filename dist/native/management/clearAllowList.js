@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$clearAllowList",
+    version: "1.0.0",
     description: "Clears the server's allow list, returns bool",
     unwrap: false,
     output: forgescript_1.ArgType.Boolean,

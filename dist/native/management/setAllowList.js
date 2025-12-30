@@ -7,6 +7,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const parsePlayer_1 = __importDefault(require("../../functions/parsePlayer"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$setAllowList",
+    version: "1.0.0",
     description: "Overwrites the existing allow list with a set of players, returns bool",
     unwrap: true,
     brackets: true,
