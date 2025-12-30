@@ -8,6 +8,7 @@ const types_1 = require("../../types");
 const convertEnum_1 = __importDefault(require("../../functions/convertEnum"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$serverGameMode",
+    version: "1.0.0",
     description: "Returns the default game mode for players when they join the server for the first time",
     unwrap: false,
     output: types_1.GameMode,

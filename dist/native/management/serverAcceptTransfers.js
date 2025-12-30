@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$serverAcceptTransfers",
+    version: "1.0.0",
     description: "Returns whether the server accepts players transferred from other servers",
     unwrap: false,
     output: forgescript_1.ArgType.Boolean,

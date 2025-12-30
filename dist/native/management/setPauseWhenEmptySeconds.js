@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$setPauseWhenEmptySeconds",
+    version: "1.0.0",
     description: "Sets the number of seconds before pausing server when no players are online",
     unwrap: true,
     brackets: true,

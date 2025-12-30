@@ -1,1 +1,1 @@
-{"version":3,"file":"setDifficulty.d.ts","sourceRoot":"","sources":["../../../src/native/management/setDifficulty.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;AAE/D,OAAO,EAAE,UAAU,EAAE,MAAM,aAAa,CAAA;;;;;;;;;AAGxC,wBAmBE"}
+{"version":3,"file":"setDifficulty.d.ts","sourceRoot":"","sources":["../../../src/native/management/setDifficulty.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;AAE/D,OAAO,EAAE,UAAU,EAAE,MAAM,aAAa,CAAA;;;;;;;;;AAGxC,wBAoBE"}

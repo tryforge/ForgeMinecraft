@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$setOperatorUserPermissionLevel",
+    version: "1.0.0",
     description: "Sets the permission level granted to new operators",
     unwrap: true,
     brackets: true,

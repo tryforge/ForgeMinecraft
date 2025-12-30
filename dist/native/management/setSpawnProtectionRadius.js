@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$setSpawnProtectionRadius",
+    version: "1.0.0",
     description: "Sets the radius around the world spawn point that is protected from non-operator players",
     unwrap: true,
     brackets: true,

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$setHideOnlinePlayers",
+    version: "1.0.0",
     description: "Sets whether the server hides the list of online players from the server list",
     unwrap: true,
     brackets: true,

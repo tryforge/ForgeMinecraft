@@ -9,6 +9,7 @@ const types_1 = require("../../types");
 const transformEnum_1 = __importDefault(require("../../functions/transformEnum"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$setDifficulty",
+    version: "1.0.0",
     description: "Sets the difficulty level of the world",
     unwrap: true,
     brackets: true,

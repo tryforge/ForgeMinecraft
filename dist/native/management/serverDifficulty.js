@@ -8,6 +8,7 @@ const types_1 = require("../../types");
 const convertEnum_1 = __importDefault(require("../../functions/convertEnum"));
 exports.default = new forgescript_1.NativeFunction({
     name: "$serverDifficulty",
+    version: "1.0.0",
     description: "Returns the difficulty level of the server",
     unwrap: false,
     output: types_1.Difficulty,

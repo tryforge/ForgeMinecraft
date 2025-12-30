@@ -5,6 +5,7 @@ import { description, version } from "../package.json"
 import { MinecraftCommandManager, MinecraftConnectionManager } from "./managers"
 import { IMinecraftEvents } from "./handlers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
+import { statusJava } from "node-mcstatus"
 
 export interface IManagementServerOptions {
     /**
@@ -29,9 +30,23 @@ export interface IManagementServerOptions {
     reconnectInterval?: number
 }
 
+export interface IJavaServerOptions {
+    /**
+     * The host domain of the server.
+     */
+    host: string
+
+    /**
+     * The port for the host connection.
+     * @default 25565
+     */
+    port?: number
+}
+
 export interface IForgeMinecraftOptions {
-    server?: IManagementServerOptions
     events?: Array<keyof IMinecraftEvents>
+    server?: IManagementServerOptions
+    java?: IJavaServerOptions
 }
 
 export type TransformEvents<T> = {
@@ -52,6 +67,14 @@ export class ForgeMinecraft extends ForgeExtension {
     public constructor(public readonly options: IForgeMinecraftOptions = {}) {
         super()
         if (options.server) options.server.reconnectInterval ??= 60_000
+    }
+
+    public async getJavaStatus(host?: string | null, port?: number) {
+        host ??= this.options.java?.host
+        port ??= this.options.java?.port
+
+        if (!host) return null
+        return await statusJava(host, port)
     }
 
     public async init(client: ForgeClient) {

@@ -21,9 +21,21 @@ export interface IManagementServerOptions {
      */
     reconnectInterval?: number;
 }
+export interface IJavaServerOptions {
+    /**
+     * The host domain of the server.
+     */
+    host: string;
+    /**
+     * The port for the host connection.
+     * @default 25565
+     */
+    port?: number;
+}
 export interface IForgeMinecraftOptions {
-    server?: IManagementServerOptions;
     events?: Array<keyof IMinecraftEvents>;
+    server?: IManagementServerOptions;
+    java?: IJavaServerOptions;
 }
 export type TransformEvents<T> = {
     [P in keyof T]: T[P] extends any[] ? (...args: T[P]) => any : never;
@@ -38,6 +50,7 @@ export declare class ForgeMinecraft extends ForgeExtension {
     private manager?;
     private emitter;
     constructor(options?: IForgeMinecraftOptions);
+    getJavaStatus(host?: string | null, port?: number): Promise<import("node-mcstatus").JavaStatusResponse | null>;
     init(client: ForgeClient): Promise<void>;
 }
 export * from "./handlers";

@@ -21,6 +21,7 @@ const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const package_json_1 = require("../package.json");
 const managers_1 = require("./managers");
 const constants_1 = require("./constants");
+const node_mcstatus_1 = require("node-mcstatus");
 class ForgeMinecraft extends forgescript_1.ForgeExtension {
     options;
     name = "forge.minecraft";
@@ -35,6 +36,13 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
         this.options = options;
         if (options.server)
             options.server.reconnectInterval ??= 60_000;
+    }
+    async getJavaStatus(host, port) {
+        host ??= this.options.java?.host;
+        port ??= this.options.java?.port;
+        if (!host)
+            return null;
+        return await (0, node_mcstatus_1.statusJava)(host, port);
     }
     async init(client) {
         this.commands = new managers_1.MinecraftCommandManager(client);
