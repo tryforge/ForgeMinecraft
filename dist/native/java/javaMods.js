@@ -13,17 +13,11 @@ var JavaModsProperty;
 })(JavaModsProperty || (exports.JavaModsProperty = JavaModsProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaMods",
+    version: "1.0.0",
     description: "Returns the mods of a java server",
     unwrap: true,
     brackets: false,
     args: [
-        {
-            name: "property",
-            description: "The property to return",
-            rest: false,
-            type: forgescript_1.ArgType.Enum,
-            enum: JavaModsProperty,
-        },
         {
             name: "host",
             description: "The host domain of the server",
@@ -35,16 +29,29 @@ exports.default = new forgescript_1.NativeFunction({
             description: "The port of the host connection",
             rest: false,
             type: forgescript_1.ArgType.Number,
-        }
+        },
+        {
+            name: "property",
+            description: "The property to return",
+            rest: false,
+            type: forgescript_1.ArgType.Enum,
+            enum: JavaModsProperty,
+        },
+        {
+            name: "separator",
+            description: "The separator to use for each value",
+            rest: false,
+            type: forgescript_1.ArgType.String,
+        },
     ],
     output: [
         forgescript_1.ArgType.Json,
         (0, array_1.default)()
     ],
-    async execute(ctx, [prop, host, port]) {
+    async execute(ctx, [host, port, prop, sep]) {
         const mods = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.mods;
         if (!mods || prop)
-            return this.success(mods?.map((x) => x[prop]));
+            return this.success(mods?.map((x) => x[prop]).join(sep ?? ", "));
         return this.successJSON(mods);
     }
 });

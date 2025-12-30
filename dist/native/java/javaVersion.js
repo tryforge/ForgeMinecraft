@@ -17,13 +17,6 @@ exports.default = new forgescript_1.NativeFunction({
     brackets: false,
     args: [
         {
-            name: "property",
-            description: "The property to return",
-            rest: false,
-            type: forgescript_1.ArgType.Enum,
-            enum: JavaVersionProperty,
-        },
-        {
             name: "host",
             description: "The host domain of the server",
             rest: false,
@@ -34,13 +27,20 @@ exports.default = new forgescript_1.NativeFunction({
             description: "The port of the host connection",
             rest: false,
             type: forgescript_1.ArgType.Number,
-        }
+        },
+        {
+            name: "property",
+            description: "The property to return",
+            rest: false,
+            type: forgescript_1.ArgType.Enum,
+            enum: JavaVersionProperty,
+        },
     ],
     output: [
         forgescript_1.ArgType.Json,
         forgescript_1.ArgType.Unknown
     ],
-    async execute(ctx, [prop, host, port]) {
+    async execute(ctx, [host, port, prop]) {
         const version = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.version;
         if (!version || prop)
             return this.success(version?.[prop]);

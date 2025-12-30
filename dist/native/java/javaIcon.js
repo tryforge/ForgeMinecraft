@@ -4,6 +4,7 @@ const forgescript_1 = require("@tryforge/forgescript");
 const discord_js_1 = require("discord.js");
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaIcon",
+    version: "1.0.0",
     description: "Returns the icon of a java server",
     unwrap: true,
     brackets: false,

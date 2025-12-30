@@ -16,13 +16,6 @@ export default new NativeFunction({
     brackets: false,
     args: [
         {
-            name: "property",
-            description: "The property to return",
-            rest: false,
-            type: ArgType.Enum,
-            enum: JavaPlayerProperty,
-        },
-        {
             name: "host",
             description: "The host domain of the server",
             rest: false,
@@ -33,12 +26,28 @@ export default new NativeFunction({
             description: "The port of the host connection",
             rest: false,
             type: ArgType.Number,
-        }
+        },
+        {
+            name: "property",
+            description: "The property to return",
+            rest: false,
+            type: ArgType.Enum,
+            enum: JavaPlayerProperty,
+        },
+        {
+            name: "separator",
+            description: "The separator to use for each value",
+            rest: false,
+            type: ArgType.String,
+        },
     ],
-    output: array<ArgType.String>(),
-    async execute(ctx, [prop, host, port]) {
+    output: [
+        ArgType.Json,
+        array<ArgType.String>()
+    ],
+    async execute(ctx, [host, port, prop, sep]) {
         const players = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.players?.list
-        if (!players || prop) return this.success(players?.map((x) => x[prop!]))
+        if (!players || prop) return this.success(players?.map((x) => x[prop!]).join(sep ?? ", "))
         return this.successJSON(players)
     }
 })

@@ -15,13 +15,6 @@ export default new NativeFunction({
     brackets: false,
     args: [
         {
-            name: "property",
-            description: "The property to return",
-            rest: false,
-            type: ArgType.Enum,
-            enum: JavaVersionProperty,
-        },
-        {
             name: "host",
             description: "The host domain of the server",
             rest: false,
@@ -32,13 +25,20 @@ export default new NativeFunction({
             description: "The port of the host connection",
             rest: false,
             type: ArgType.Number,
-        }
+        },
+        {
+            name: "property",
+            description: "The property to return",
+            rest: false,
+            type: ArgType.Enum,
+            enum: JavaVersionProperty,
+        },
     ],
     output: [
         ArgType.Json,
         ArgType.Unknown
     ],
-    async execute(ctx, [prop, host, port]) {
+    async execute(ctx, [host, port, prop]) {
         const version = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.version
         if (!version || prop) return this.success(version?.[prop!])
         return this.successJSON(version)

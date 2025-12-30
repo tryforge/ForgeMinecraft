@@ -15,17 +15,11 @@ var JavaPlayerProperty;
 })(JavaPlayerProperty || (exports.JavaPlayerProperty = JavaPlayerProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaPlayerList",
+    version: "1.0.0",
     description: "Returns the online player list of a java server",
     unwrap: true,
     brackets: false,
     args: [
-        {
-            name: "property",
-            description: "The property to return",
-            rest: false,
-            type: forgescript_1.ArgType.Enum,
-            enum: JavaPlayerProperty,
-        },
         {
             name: "host",
             description: "The host domain of the server",
@@ -37,13 +31,29 @@ exports.default = new forgescript_1.NativeFunction({
             description: "The port of the host connection",
             rest: false,
             type: forgescript_1.ArgType.Number,
-        }
+        },
+        {
+            name: "property",
+            description: "The property to return",
+            rest: false,
+            type: forgescript_1.ArgType.Enum,
+            enum: JavaPlayerProperty,
+        },
+        {
+            name: "separator",
+            description: "The separator to use for each value",
+            rest: false,
+            type: forgescript_1.ArgType.String,
+        },
     ],
-    output: (0, array_1.default)(),
-    async execute(ctx, [prop, host, port]) {
+    output: [
+        forgescript_1.ArgType.Json,
+        (0, array_1.default)()
+    ],
+    async execute(ctx, [host, port, prop, sep]) {
         const players = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.players?.list;
         if (!players || prop)
-            return this.success(players?.map((x) => x[prop]));
+            return this.success(players?.map((x) => x[prop]).join(sep ?? ", "));
         return this.successJSON(players);
     }
 });

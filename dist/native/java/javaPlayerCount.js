@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaPlayerCount",
+    version: "1.0.0",
     description: "Returns the online player count of a java server",
     unwrap: true,
     brackets: false,

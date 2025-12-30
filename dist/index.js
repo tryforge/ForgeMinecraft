@@ -17,11 +17,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgeMinecraft = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
 const mc_server_management_1 = require("mc-server-management");
+const node_mcstatus_1 = require("node-mcstatus");
 const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const package_json_1 = require("../package.json");
 const managers_1 = require("./managers");
 const constants_1 = require("./constants");
-const node_mcstatus_1 = require("node-mcstatus");
 class ForgeMinecraft extends forgescript_1.ForgeExtension {
     options;
     name = "forge.minecraft";
@@ -37,6 +37,12 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
         if (options.server)
             options.server.reconnectInterval ??= 60_000;
     }
+    /**
+     * Gets the status response of a Java Minecraft server. Uses the `java` client options if no parameters are provided.
+     * @param host The host domain of the server.
+     * @param port The port for the host domain.
+     * @returns
+     */
     async getJavaStatus(host, port) {
         host ??= this.options.java?.host;
         port ??= this.options.java?.port;
@@ -44,6 +50,12 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
             return null;
         return await (0, node_mcstatus_1.statusJava)(host, port);
     }
+    /**
+     * Gets the status response of a Bedrock Minecraft server. Uses the `bedrock` client options if no parameters are provided.
+     * @param host The host domain of the server.
+     * @param port The port for the host domain.
+     * @returns
+     */
     async getBedrockStatus(host, port) {
         host ??= this.options.bedrock?.host;
         port ??= this.options.bedrock?.port;
@@ -52,6 +64,7 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
         return await (0, node_mcstatus_1.statusBedrock)(host, port);
     }
     async init(client) {
+        forgescript_1.ForgeClient.prototype.minecraft = this;
         this.commands = new managers_1.MinecraftCommandManager(client);
         if (this.options.server) {
             this.manager = new managers_1.MinecraftConnectionManager(this.options.server);
@@ -95,7 +108,6 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
         if (this.options.events?.length) {
             client.events.load(constants_1.ForgeMinecraftEventHandlerName, this.options.events);
         }
-        forgescript_1.ForgeClient.prototype.minecraft = this;
     }
 }
 exports.ForgeMinecraft = ForgeMinecraft;

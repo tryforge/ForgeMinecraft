@@ -9,18 +9,18 @@ declare const _default: NativeFunction<[{
     name: string;
     description: string;
     rest: false;
-    type: ArgType.Enum;
-    enum: typeof JavaVersionProperty;
-}, {
-    name: string;
-    description: string;
-    rest: false;
     type: ArgType.String;
 }, {
     name: string;
     description: string;
     rest: false;
     type: ArgType.Number;
+}, {
+    name: string;
+    description: string;
+    rest: false;
+    type: ArgType.Enum;
+    enum: typeof JavaVersionProperty;
 }], true>;
 export default _default;
 //# sourceMappingURL=javaVersion.d.ts.map

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const forgescript_1 = require("@tryforge/forgescript");
 exports.default = new forgescript_1.NativeFunction({
     name: "$bedrockIPAddress",
+    version: "1.0.0",
     description: "Returns the IP address of a bedrock server",
     unwrap: true,
     brackets: false,

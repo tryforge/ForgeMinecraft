@@ -7,6 +7,16 @@ declare const _default: NativeFunction<[{
     name: string;
     description: string;
     rest: false;
+    type: ArgType.String;
+}, {
+    name: string;
+    description: string;
+    rest: false;
+    type: ArgType.Number;
+}, {
+    name: string;
+    description: string;
+    rest: false;
     type: ArgType.Enum;
     enum: typeof JavaModsProperty;
 }, {
@@ -14,11 +24,6 @@ declare const _default: NativeFunction<[{
     description: string;
     rest: false;
     type: ArgType.String;
-}, {
-    name: string;
-    description: string;
-    rest: false;
-    type: ArgType.Number;
 }], true>;
 export default _default;
 //# sourceMappingURL=javaMods.d.ts.map

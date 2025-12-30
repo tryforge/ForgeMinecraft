@@ -14,13 +14,6 @@ export default new NativeFunction({
     brackets: false,
     args: [
         {
-            name: "property",
-            description: "The property to return",
-            rest: false,
-            type: ArgType.Enum,
-            enum: JavaModsProperty,
-        },
-        {
             name: "host",
             description: "The host domain of the server",
             rest: false,
@@ -31,15 +24,28 @@ export default new NativeFunction({
             description: "The port of the host connection",
             rest: false,
             type: ArgType.Number,
-        }
+        },
+        {
+            name: "property",
+            description: "The property to return",
+            rest: false,
+            type: ArgType.Enum,
+            enum: JavaModsProperty,
+        },
+        {
+            name: "separator",
+            description: "The separator to use for each value",
+            rest: false,
+            type: ArgType.String,
+        },
     ],
     output: [
         ArgType.Json,
         array<ArgType.String>()
     ],
-    async execute(ctx, [prop, host, port]) {
+    async execute(ctx, [host, port, prop, sep]) {
         const mods = (await ctx.client.minecraft.getJavaStatus(host, port || undefined).catch(ctx.noop))?.mods
-        if (!mods || prop) return this.success(mods?.map((x) => x[prop!]))
+        if (!mods || prop) return this.success(mods?.map((x) => x[prop!]).join(sep ?? ", "))
         return this.successJSON(mods)
     }
 })

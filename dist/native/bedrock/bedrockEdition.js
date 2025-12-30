@@ -9,6 +9,7 @@ var BedrockEdition;
 })(BedrockEdition || (exports.BedrockEdition = BedrockEdition = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$bedrockEdition",
+    version: "1.0.0",
     description: "Returns the edition of a bedrock server",
     unwrap: true,
     brackets: false,

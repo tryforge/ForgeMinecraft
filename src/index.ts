@@ -1,11 +1,11 @@
 import { EventManager, ForgeClient, ForgeExtension } from "@tryforge/forgescript"
 import { MinecraftServer, Notifications } from "mc-server-management"
+import { statusBedrock, statusJava } from "node-mcstatus"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { description, version } from "../package.json"
 import { MinecraftCommandManager, MinecraftConnectionManager } from "./managers"
-import { IMinecraftEvents } from "./handlers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
-import { statusBedrock, statusJava } from "node-mcstatus"
+import { IMinecraftEvents } from "./handlers"
 
 export interface IManagementServerOptions {
     /**
@@ -37,7 +37,7 @@ export interface IJavaServerOptions {
     host: string
 
     /**
-     * The port for the host connection.
+     * The port for the host domain.
      * @default 25565
      */
     port?: number
@@ -50,16 +50,31 @@ export interface IBedrockServerOptions {
     host: string
 
     /**
-     * The port for the host connection.
+     * The port for the host domain.
      * @default 19132
      */
     port?: number
 }
 
 export interface IForgeMinecraftOptions {
+    /**
+     * The events to receive from the management server.
+     */
     events?: Array<keyof IMinecraftEvents>
+
+    /**
+     * The management server options used to establish a connection.
+     */
     server?: IManagementServerOptions
+
+    /**
+     * The default Java server options to use for java functions.
+     */
     java?: IJavaServerOptions
+
+    /**
+     * The default Bedrock server options to use for bedrock functions.
+     */
     bedrock?: IBedrockServerOptions
 }
 
@@ -83,6 +98,12 @@ export class ForgeMinecraft extends ForgeExtension {
         if (options.server) options.server.reconnectInterval ??= 60_000
     }
 
+    /**
+     * Gets the status response of a Java Minecraft server. Uses the `java` client options if no parameters are provided.
+     * @param host The host domain of the server.
+     * @param port The port for the host domain.
+     * @returns 
+     */
     public async getJavaStatus(host?: string | null, port?: number) {
         host ??= this.options.java?.host
         port ??= this.options.java?.port
@@ -91,6 +112,12 @@ export class ForgeMinecraft extends ForgeExtension {
         return await statusJava(host, port)
     }
 
+    /**
+     * Gets the status response of a Bedrock Minecraft server. Uses the `bedrock` client options if no parameters are provided.
+     * @param host The host domain of the server.
+     * @param port The port for the host domain.
+     * @returns 
+     */
     public async getBedrockStatus(host?: string | null, port?: number) {
         host ??= this.options.bedrock?.host
         port ??= this.options.bedrock?.port
@@ -100,6 +127,8 @@ export class ForgeMinecraft extends ForgeExtension {
     }
 
     public async init(client: ForgeClient) {
+        ForgeClient.prototype.minecraft = this
+
         this.commands = new MinecraftCommandManager(client)
 
         if (this.options.server) {
@@ -150,8 +179,6 @@ export class ForgeMinecraft extends ForgeExtension {
         if (this.options.events?.length) {
             client.events.load(ForgeMinecraftEventHandlerName, this.options.events)
         }
-
-        ForgeClient.prototype.minecraft = this
     }
 }
 
