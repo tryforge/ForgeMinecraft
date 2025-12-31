@@ -1,5 +1,5 @@
 {
-  "name": "forge.minecraft",
+  "name": "@tryforge/forge.minecraft",
   "version": "1.0.0",
   "description": "ForgeMinecraft is an extension that provides real-time Minecraft server management via the management server protocol, alongside various functions for retrieving status and metadata from Java and Bedrock servers.",
   "main": "dist/index.js",
