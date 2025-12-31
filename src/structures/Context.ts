@@ -1,6 +1,7 @@
 import { Context as BaseContext, IContextCache, IRunnable, Sendable } from "@tryforge/forgescript"
 import { GameRuleType, IPBan, Operator, Player, ServerState, TypedGameRule, UserBan } from "mc-server-management"
 import { ForgeMinecraft } from ".."
+import contextNoop from "../functions/contextNoop"
 
 export type ExtendedSendable =
     | Sendable
@@ -58,10 +59,15 @@ export class Context extends BaseContext {
     public get ipBan() {
         return this.#cache.ipBan ??= this.obj instanceof IPBan ? this.obj : null
     }
+
+    public get noop(): (...args: any[]) => void {
+        return contextNoop.bind(this)
+    }
 }
 
 declare module "@tryforge/forgescript" {
     interface Context {
+        noop: (...args: any[]) => void
         player: Player | null
         operator: Operator | null
         serverState: ServerState | null

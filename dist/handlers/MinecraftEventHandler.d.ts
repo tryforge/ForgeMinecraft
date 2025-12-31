@@ -2,6 +2,9 @@ import { GameRuleType, IPBan, Operator, Player, ServerState, TypedGameRule, User
 import { BaseEventHandler, ForgeClient } from "@tryforge/forgescript";
 export interface IMinecraftEvents {
     error: [Error];
+    connected: [];
+    reconnecting: [];
+    disconnected: [];
     serverStarted: [];
     serverStopping: [];
     serverSaving: [];

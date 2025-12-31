@@ -5,6 +5,7 @@ import { IMinecraftEvents } from "../handlers";
 import { IManagementServerOptions, TransformEvents } from "../index";
 export interface IConnectionEvents {
     connected: (server: MinecraftServer) => void;
+    reconnecting: () => void;
     disconnected: () => void;
 }
 export declare class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> {

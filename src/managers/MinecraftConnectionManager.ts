@@ -6,6 +6,7 @@ import { IManagementServerOptions, TransformEvents } from "../index"
 
 export interface IConnectionEvents {
     connected: (server: MinecraftServer) => void
+    reconnecting: () => void
     disconnected: () => void
 }
 
@@ -35,10 +36,11 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
             return
         }
 
-        Logger.info("[ForgeMinecraft] Management connection established.")
-
         this.connection = connection
         this.server = new MinecraftServer(connection)
+
+        Logger.info("[ForgeMinecraft] Management connection established.")
+        this.emitter.emit("connected")
 
         this._attachSocketListeners(connection)
 
@@ -51,13 +53,18 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
     private _attachSocketListeners(connection: WebSocketConnection) {
         connection.on("open", () => {
             Logger.info("[ForgeMinecraft] Management connection established.")
+            this.emitter.emit("connected")
         })
 
         connection.on("close", () => {
             Logger.warn("[ForgeMinecraft] Management connection closed.")
-            this.emit("disconnected")
+            // this.emit("disconnected")
+            this.emitter.emit("disconnected")
+
             if (this.options.reconnect !== false) {
                 Logger.info("[ForgeMinecraft] Reconnecting to management server...")
+                // this.emit("reconnecting")
+                this.emitter.emit("reconnecting")
             }
         })
 

@@ -4,6 +4,9 @@ import { ForgeMinecraft } from ".."
 
 export interface IMinecraftEvents {
     error: [Error]
+    connected: []
+    reconnecting: []
+    disconnected: []
     serverStarted: []
     serverStopping: []
     serverSaving: []

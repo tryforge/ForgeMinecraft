@@ -24,9 +24,11 @@ export declare class Context extends BaseContext {
     get gameRule(): TypedGameRule<GameRuleType> | null;
     get userBan(): UserBan | null;
     get ipBan(): IPBan | null;
+    get noop(): (...args: any[]) => void;
 }
 declare module "@tryforge/forgescript" {
     interface Context {
+        noop: (...args: any[]) => void;
         player: Player | null;
         operator: Operator | null;
         serverState: ServerState | null;
