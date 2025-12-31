@@ -26,6 +26,7 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
             forgescript_1.Logger.warn("[ForgeMinecraft] Management connection could not be established.");
             return;
         }
+        forgescript_1.Logger.info("[ForgeMinecraft] Management connection established.");
         this.connection = connection;
         this.server = new mc_server_management_1.MinecraftServer(connection);
         this._attachSocketListeners(connection);
@@ -38,8 +39,10 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
         });
         connection.on("close", () => {
             forgescript_1.Logger.warn("[ForgeMinecraft] Management connection closed.");
-            this.server = undefined;
             this.emit("disconnected");
+            if (this.options.reconnect !== false) {
+                forgescript_1.Logger.info("[ForgeMinecraft] Reconnecting to management server...");
+            }
         });
         connection.on("max_reconnects_reached", () => {
             forgescript_1.Logger.warn("[ForgeMinecraft] Maximum reconnect attempts reached. Connection closed.");

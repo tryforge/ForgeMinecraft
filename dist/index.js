@@ -64,9 +64,6 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
             this.manager.on("connected", (server) => {
                 this.server = server;
             });
-            this.manager.on("disconnected", () => {
-                this.server = undefined;
-            });
             await this.manager.connect();
         }
         forgescript_1.EventManager.load(constants_1.ForgeMinecraftEventHandlerName, __dirname + `/events`);

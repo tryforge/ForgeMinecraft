@@ -141,10 +141,6 @@ export class ForgeMinecraft extends ForgeExtension {
                 this.server = server
             })
 
-            this.manager.on("disconnected", () => {
-                this.server = undefined
-            })
-
             await this.manager.connect()
         }
 

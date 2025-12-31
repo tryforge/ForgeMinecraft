@@ -35,6 +35,8 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
             return
         }
 
+        Logger.info("[ForgeMinecraft] Management connection established.")
+
         this.connection = connection
         this.server = new MinecraftServer(connection)
 
@@ -51,8 +53,10 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
 
         connection.on("close", () => {
             Logger.warn("[ForgeMinecraft] Management connection closed.")
-            this.server = undefined
             this.emit("disconnected")
+            if (this.options.reconnect !== false) {
+                Logger.info("[ForgeMinecraft] Reconnecting to management server...")
+            }
         })
 
         connection.on("max_reconnects_reached", () => {
