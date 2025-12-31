@@ -1,7 +1,7 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript"
 import array from "../../functions/array"
 
-export enum JavaModsProperty {
+export enum JavaModProperty {
     name = "name",
     version = "version",
 }
@@ -30,7 +30,7 @@ export default new NativeFunction({
             description: "The property to return",
             rest: false,
             type: ArgType.Enum,
-            enum: JavaModsProperty,
+            enum: JavaModProperty,
         },
         {
             name: "separator",

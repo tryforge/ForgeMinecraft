@@ -1,5 +1,5 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript";
-export declare enum JavaPluginsProperty {
+export declare enum JavaPluginProperty {
     name = "name",
     version = "version"
 }
@@ -18,7 +18,7 @@ declare const _default: NativeFunction<[{
     description: string;
     rest: false;
     type: ArgType.Enum;
-    enum: typeof JavaPluginsProperty;
+    enum: typeof JavaPluginProperty;
 }, {
     name: string;
     description: string;

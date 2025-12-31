@@ -40,14 +40,17 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         this.server = new MinecraftServer(connection)
 
         Logger.info("[ForgeMinecraft] Management connection established.")
-        this.emitter.emit("connected")
 
         this._attachSocketListeners(connection)
-
-        if (client.isReady() as boolean) this._attachServerListeners(this.server)
-        else client.once("clientReady", () => this._attachServerListeners(this.server!))
-
         this.emit("connected", this.server)
+
+        const onReady = () => {
+            this.emitter.emit("connected")
+            this._attachServerListeners(this.server!)
+        }
+
+        if (client.isReady() as boolean) onReady()
+        else client.once("clientReady", () => onReady())
     }
 
     private _attachSocketListeners(connection: WebSocketConnection) {
@@ -73,7 +76,7 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         })
 
         connection.on("error", (err) => {
-            Logger.debug("[ForgeMinecraft] Management socket error:", err.message)
+            Logger.error("[ForgeMinecraft] Management socket error:", err)
         })
     }
 

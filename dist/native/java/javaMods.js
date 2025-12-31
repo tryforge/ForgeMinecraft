@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JavaModsProperty = void 0;
+exports.JavaModProperty = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
 const array_1 = __importDefault(require("../../functions/array"));
-var JavaModsProperty;
-(function (JavaModsProperty) {
-    JavaModsProperty["name"] = "name";
-    JavaModsProperty["version"] = "version";
-})(JavaModsProperty || (exports.JavaModsProperty = JavaModsProperty = {}));
+var JavaModProperty;
+(function (JavaModProperty) {
+    JavaModProperty["name"] = "name";
+    JavaModProperty["version"] = "version";
+})(JavaModProperty || (exports.JavaModProperty = JavaModProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaMods",
     version: "1.0.0",
@@ -35,7 +35,7 @@ exports.default = new forgescript_1.NativeFunction({
             description: "The property to return",
             rest: false,
             type: forgescript_1.ArgType.Enum,
-            enum: JavaModsProperty,
+            enum: JavaModProperty,
         },
         {
             name: "separator",

@@ -1,1 +1,1 @@
-{"version":3,"file":"javaMods.d.ts","sourceRoot":"","sources":["../../../src/native/java/javaMods.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;AAG/D,oBAAY,gBAAgB;IACxB,IAAI,SAAS;IACb,OAAO,YAAY;CACtB;;;;;;;;;;;;;;;;;;;;;;;AAED,wBA0CE"}
+{"version":3,"file":"javaMods.d.ts","sourceRoot":"","sources":["../../../src/native/java/javaMods.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,cAAc,EAAE,MAAM,uBAAuB,CAAA;AAG/D,oBAAY,eAAe;IACvB,IAAI,SAAS;IACb,OAAO,YAAY;CACtB;;;;;;;;;;;;;;;;;;;;;;;AAED,wBA0CE"}

@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JavaPluginsProperty = void 0;
+exports.JavaPluginProperty = void 0;
 const forgescript_1 = require("@tryforge/forgescript");
 const array_1 = __importDefault(require("../../functions/array"));
-var JavaPluginsProperty;
-(function (JavaPluginsProperty) {
-    JavaPluginsProperty["name"] = "name";
-    JavaPluginsProperty["version"] = "version";
-})(JavaPluginsProperty || (exports.JavaPluginsProperty = JavaPluginsProperty = {}));
+var JavaPluginProperty;
+(function (JavaPluginProperty) {
+    JavaPluginProperty["name"] = "name";
+    JavaPluginProperty["version"] = "version";
+})(JavaPluginProperty || (exports.JavaPluginProperty = JavaPluginProperty = {}));
 exports.default = new forgescript_1.NativeFunction({
     name: "$javaPlugins",
     version: "1.0.0",
@@ -35,7 +35,7 @@ exports.default = new forgescript_1.NativeFunction({
             description: "The property to return",
             rest: false,
             type: forgescript_1.ArgType.Enum,
-            enum: JavaPluginsProperty,
+            enum: JavaPluginProperty,
         },
         {
             name: "separator",

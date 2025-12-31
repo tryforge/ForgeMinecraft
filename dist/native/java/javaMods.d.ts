@@ -1,5 +1,5 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript";
-export declare enum JavaModsProperty {
+export declare enum JavaModProperty {
     name = "name",
     version = "version"
 }
@@ -18,7 +18,7 @@ declare const _default: NativeFunction<[{
     description: string;
     rest: false;
     type: ArgType.Enum;
-    enum: typeof JavaModsProperty;
+    enum: typeof JavaModProperty;
 }, {
     name: string;
     description: string;

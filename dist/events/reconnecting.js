@@ -5,6 +5,7 @@ const handlers_1 = require("../handlers");
 const __1 = require("..");
 exports.default = new handlers_1.MinecraftEventHandler({
     name: "reconnecting",
+    version: "1.0.0",
     description: "This event is fired when the management server is reconnecting",
     listener: async function () {
         const commands = this.getExtension(__1.ForgeMinecraft, true).commands.get("reconnecting");

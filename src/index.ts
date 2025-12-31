@@ -1,5 +1,5 @@
-import { EventManager, ForgeClient, ForgeExtension, Logger } from "@tryforge/forgescript"
-import { MinecraftServer, Notifications, WebSocketConnection } from "mc-server-management"
+import { EventManager, ForgeClient, ForgeExtension } from "@tryforge/forgescript"
+import { MinecraftServer } from "mc-server-management"
 import { statusBedrock, statusJava } from "node-mcstatus"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { description, version } from "../package.json"

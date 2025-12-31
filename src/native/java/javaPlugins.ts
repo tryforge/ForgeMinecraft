@@ -1,7 +1,7 @@
 import { ArgType, NativeFunction } from "@tryforge/forgescript"
 import array from "../../functions/array"
 
-export enum JavaPluginsProperty {
+export enum JavaPluginProperty {
     name = "name",
     version = "version",
 }
@@ -30,7 +30,7 @@ export default new NativeFunction({
             description: "The property to return",
             rest: false,
             type: ArgType.Enum,
-            enum: JavaPluginsProperty,
+            enum: JavaPluginProperty,
         },
         {
             name: "separator",
