@@ -100,8 +100,8 @@ export class ForgeMinecraft extends ForgeExtension {
     version = version
 
     public server?: MinecraftServer
+    public connection?: WebSocketConnection
     public commands!: MinecraftCommandManager
-    private manager?: MinecraftConnectionManager
 
     private emitter = new TypedEmitter<TransformEvents<IMinecraftEvents>>()
 
@@ -153,42 +153,53 @@ export class ForgeMinecraft extends ForgeExtension {
             }).catch(() => { })
 
             if (connection) {
-                connection.on("open", () => {
-                    this.server = new MinecraftServer(connection)
-                    Logger.info("[ForgeMinecraft] Management connection established.")
+                this.connection = connection
+                this.server = new MinecraftServer(connection)
+                Logger.info("[ForgeMinecraft] Management connection established.")
 
-                    const attachListeners = () => {
-                        const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
-                            this.server!.on(event, (data) => this.emitter.emit(targetEvent, data))
-                        }
-
-                        listen("error")
-                        listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
-                        listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
-                        listen(Notifications.BAN_ADDED, "banAdded")
-                        listen(Notifications.BAN_REMOVED, "banRemoved")
-                        listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
-                        listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
-                        listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
-                        listen(Notifications.OPERATOR_ADDED, "operatorAdded")
-                        listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
-                        listen(Notifications.PLAYER_JOINED, "playerJoined")
-                        listen(Notifications.PLAYER_LEFT, "playerLeft")
-                        listen(Notifications.SERVER_ACTIVITY, "serverActivity")
-                        listen(Notifications.SERVER_SAVED, "serverSaved")
-                        listen(Notifications.SERVER_SAVING, "serverSaving")
-                        listen(Notifications.SERVER_STARTED, "serverStarted")
-                        listen(Notifications.SERVER_STATUS, "serverStatus")
-                        listen(Notifications.SERVER_STOPPING, "serverStopping")
+                const attachListeners = () => {
+                    const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
+                        this.server!.on(event, (data) => this.emitter.emit(targetEvent, data))
                     }
 
-                    if (client.isReady() as boolean) attachListeners()
-                    else client.once("clientReady", attachListeners)
+                    listen("error")
+                    listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
+                    listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
+                    listen(Notifications.BAN_ADDED, "banAdded")
+                    listen(Notifications.BAN_REMOVED, "banRemoved")
+                    listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
+                    listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
+                    listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
+                    listen(Notifications.OPERATOR_ADDED, "operatorAdded")
+                    listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
+                    listen(Notifications.PLAYER_JOINED, "playerJoined")
+                    listen(Notifications.PLAYER_LEFT, "playerLeft")
+                    listen(Notifications.SERVER_ACTIVITY, "serverActivity")
+                    listen(Notifications.SERVER_SAVED, "serverSaved")
+                    listen(Notifications.SERVER_SAVING, "serverSaving")
+                    listen(Notifications.SERVER_STARTED, "serverStarted")
+                    listen(Notifications.SERVER_STATUS, "serverStatus")
+                    listen(Notifications.SERVER_STOPPING, "serverStopping")
+                }
+
+                if (client.isReady() as boolean) attachListeners()
+                else client.once("clientReady", attachListeners)
+
+                connection.on("open", () => {
+                    Logger.info("[ForgeMinecraft] Management connection established.")
                 })
 
                 connection.on("close", () => {
                     Logger.warn("[ForgeMinecraft] Management connection closed.")
-                    this.server = undefined
+                    Logger.info("[ForgeMinecraft] Reconnecting to management server...")
+                })
+
+                connection.on("max_reconnects_reached", () => {
+                    Logger.warn("[ForgeMinecraft] Maximum reconnect attempts reached. Management connection closed.")
+                })
+
+                connection.on("error", (err) => {
+                    Logger.debug("[ForgeMinecraft] Management socket error:", err.message)
                 })
             } else {
                 Logger.warn("[ForgeMinecraft] Management connection could not be established.")
