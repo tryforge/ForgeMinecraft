@@ -76,7 +76,7 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         })
 
         connection.on("error", (err) => {
-            Logger.error("[ForgeMinecraft] Management socket error:", err)
+            Logger.debug("[ForgeMinecraft] Management socket error:", err.message)
         })
     }
 

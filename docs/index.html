@@ -34,19 +34,16 @@ View all available client options <a href="https://tryforge.github.io/ForgeMinec
 <h3 align="center">Management Server</h3><hr>
 <p>Minecraft’s management server protocol, introduced in <strong>1.21.9</strong>, enables remote management and monitoring of your Minecraft server. It allows this extension to connect to the server, execute administrative actions, and receive real-time events such as player activity, server status changes, and configuration updates, making automation and server control easier.</p>
 <h4 id="setting-up-the-minecraft-server" class="tsd-anchor-link">Setting up the Minecraft Server<a href="#setting-up-the-minecraft-server" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To enable the management server protocol, set up <code>management-server-enabled</code>, <code>management-server-port</code> and <code>management-server-host</code> in the <strong>server.properties</strong> file of your Minecraft server:</p>
-<pre><code class="properties">management-server-enabled=true
-management-server-port=25585
-management-server-host=0.0.0.0
-management-server-secret=
+<pre><code class="properties"><span class="hl-3">management-server-enabled</span><span class="hl-1">=true</span><br/><span class="hl-3">management-server-port</span><span class="hl-1">=25585</span><br/><span class="hl-3">management-server-host</span><span class="hl-1">=0.0.0.0</span><br/><span class="hl-3">management-server-secret</span><span class="hl-1">=</span>
 </code><button type="button">Copy</button></pre>
 
 <p>You can either set <code>management-server-secret</code> to a random 40 character long alphanumeric string or leave it empty and let the Minecraft server generate a random token on startup. You will need this token to connect to the server.</p>
 <p>If you want to establish connections from a web browser, you need to set the allowed origins:</p>
-<pre><code class="properties">management-server-allowed-origins=http\://localhost\:63315
+<pre><code class="properties"><span class="hl-3">management-server-allowed-origins</span><span class="hl-1">=http\://localhost\:63315</span>
 </code><button type="button">Copy</button></pre>
 
 <h4 id="tls" class="tsd-anchor-link">TLS<a href="#tls" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4><p>By default, TLS is enabled, but the server will crash if you don't provide a certificate. If the management server protocol is not exposed to the internet, or you are using a reverse proxy, the easiest option would be to disable TLS:</p>
-<pre><code class="properties">management-server-tls-enabled=false
+<pre><code class="properties"><span class="hl-3">management-server-tls-enabled</span><span class="hl-1">=false</span>
 </code><button type="button">Copy</button></pre>
 
 <h4 id="setting-up-client-configurations" class="tsd-anchor-link">Setting up Client Configurations<a href="#setting-up-client-configurations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Next, configure the <strong>ForgeMinecraft</strong> client. This is where you specify which server <code>events</code> you want to listen to and provide the management server connection details, such as <code>host</code>, <code>port</code>, and authentication <code>token</code> (secret). These options determine how ForgeMinecraft connects to your server and which real-time events the extension receives.</p>

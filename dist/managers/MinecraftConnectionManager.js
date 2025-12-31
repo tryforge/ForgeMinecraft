@@ -59,7 +59,7 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
             forgescript_1.Logger.warn("[ForgeMinecraft] Maximum reconnect attempts reached. Connection closed.");
         });
         connection.on("error", (err) => {
-            forgescript_1.Logger.error("[ForgeMinecraft] Management socket error:", err);
+            forgescript_1.Logger.debug("[ForgeMinecraft] Management socket error:", err.message);
         });
     }
     _attachServerListeners(server) {
