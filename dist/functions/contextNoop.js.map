@@ -1,0 +1,1 @@
+{"version":3,"file":"contextNoop.js","sourceRoot":"","sources":["../../src/functions/contextNoop.ts"],"names":[],"mappings":";;AAEA,4BAMC;AARD,uDAAuD;AAEvD,mBAAuC,GAAG,IAAW;IACjD,IAAI,IAAI,CAAC,wBAAwB,EAAE,EAAE,CAAC;QAClC,OAAM;IACV,CAAC;IAED,oBAAM,CAAC,KAAK,CAAC,kBAAkB,EAAE,GAAG,IAAI,CAAC,CAAA;AAC7C,CAAC"}
