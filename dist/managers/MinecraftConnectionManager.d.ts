@@ -1,4 +1,5 @@
 import { MinecraftServer, WebSocketConnection } from "mc-server-management";
+import { ForgeClient } from "@tryforge/forgescript";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { IMinecraftEvents } from "../handlers";
 import { IManagementServerOptions, TransformEvents } from "../index";
@@ -12,7 +13,7 @@ export declare class MinecraftConnectionManager extends TypedEmitter<IConnection
     connection?: WebSocketConnection;
     server?: MinecraftServer;
     constructor(options: IManagementServerOptions, emitter: TypedEmitter<TransformEvents<IMinecraftEvents>>);
-    connect(): Promise<void>;
+    connect(client: ForgeClient): Promise<void>;
     private _attachSocketListeners;
     private _attachServerListeners;
 }

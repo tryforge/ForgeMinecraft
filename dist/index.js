@@ -64,7 +64,7 @@ class ForgeMinecraft extends forgescript_1.ForgeExtension {
             this.manager.on("connected", (server) => {
                 this.server = server;
             });
-            await this.manager.connect();
+            await this.manager.connect(client);
         }
         forgescript_1.EventManager.load(constants_1.ForgeMinecraftEventHandlerName, __dirname + `/events`);
         this.load(__dirname + `/native`);

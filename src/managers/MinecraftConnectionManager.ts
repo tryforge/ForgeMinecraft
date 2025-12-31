@@ -1,5 +1,5 @@
 import { EventData, MinecraftServer, Notifications, WebSocketConnection } from "mc-server-management"
-import { Logger } from "@tryforge/forgescript"
+import { ForgeClient, Logger } from "@tryforge/forgescript"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { IMinecraftEvents } from "../handlers"
 import { IManagementServerOptions, TransformEvents } from "../index"
@@ -20,7 +20,7 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         super()
     }
 
-    public async connect() {
+    public async connect(client: ForgeClient) {
         Logger.info("[ForgeMinecraft] Connecting to management server...")
 
         const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options
@@ -41,7 +41,9 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         this.server = new MinecraftServer(connection)
 
         this._attachSocketListeners(connection)
-        this._attachServerListeners(this.server)
+
+        if (client.isReady() as boolean) this._attachServerListeners(this.server)
+        else client.once("clientReady", () => this._attachServerListeners(this.server!))
 
         this.emit("connected", this.server)
     }
@@ -91,7 +93,7 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
         ]
 
         for (const [event, targetEvent] of events) {
-            server.on(event, (...data) => { 
+            server.on(event, (...data) => {
                 this.emitter.emit(targetEvent, ...data)
             })
         }

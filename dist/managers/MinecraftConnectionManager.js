@@ -14,7 +14,7 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
         this.options = options;
         this.emitter = emitter;
     }
-    async connect() {
+    async connect(client) {
         forgescript_1.Logger.info("[ForgeMinecraft] Connecting to management server...");
         const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options;
         const connection = await mc_server_management_1.WebSocketConnection.connect(`ws://${host}:${port}`, token, {
@@ -30,7 +30,10 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
         this.connection = connection;
         this.server = new mc_server_management_1.MinecraftServer(connection);
         this._attachSocketListeners(connection);
-        this._attachServerListeners(this.server);
+        if (client.isReady())
+            this._attachServerListeners(this.server);
+        else
+            client.once("clientReady", () => this._attachServerListeners(this.server));
         this.emit("connected", this.server);
     }
     _attachSocketListeners(connection) {

@@ -141,7 +141,7 @@ export class ForgeMinecraft extends ForgeExtension {
                 this.server = server
             })
 
-            await this.manager.connect()
+            await this.manager.connect(client)
         }
 
         EventManager.load(ForgeMinecraftEventHandlerName, __dirname + `/events`)
