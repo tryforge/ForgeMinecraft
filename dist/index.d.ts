@@ -1,5 +1,5 @@
 import { ForgeClient, ForgeExtension } from "@tryforge/forgescript";
-import { MinecraftServer, WebSocketConnection } from "mc-server-management";
+import { MinecraftServer } from "mc-server-management";
 import { MinecraftCommandManager } from "./managers";
 import { IMinecraftEvents } from "./handlers";
 export interface IManagementServerOptions {
@@ -80,8 +80,8 @@ export declare class ForgeMinecraft extends ForgeExtension {
     description: string;
     version: string;
     server?: MinecraftServer;
-    connection?: WebSocketConnection;
     commands: MinecraftCommandManager;
+    private manager?;
     private emitter;
     constructor(options?: IForgeMinecraftOptions);
     /**

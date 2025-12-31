@@ -1,7 +1,8 @@
-import { MinecraftServer, WebSocketConnection } from "mc-server-management"
-import { TypedEmitter } from "tiny-typed-emitter"
+import { EventData, MinecraftServer, Notifications, WebSocketConnection } from "mc-server-management"
 import { Logger } from "@tryforge/forgescript"
-import { IManagementServerOptions } from ".."
+import { TypedEmitter } from "tiny-typed-emitter"
+import { IMinecraftEvents } from "../handlers"
+import { IManagementServerOptions, TransformEvents } from "../index"
 
 export interface IConnectionEvents {
     connected: (server: MinecraftServer) => void
@@ -9,121 +10,86 @@ export interface IConnectionEvents {
 }
 
 export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> {
-    private connection?: WebSocketConnection
-    private server?: MinecraftServer
-    private reconnectTimer?: NodeJS.Timeout
+    public connection?: WebSocketConnection
+    public server?: MinecraftServer
 
-    constructor(private readonly options: IManagementServerOptions) {
+    constructor(
+        private readonly options: IManagementServerOptions,
+        private readonly emitter: TypedEmitter<TransformEvents<IMinecraftEvents>>
+    ) {
         super()
     }
 
-    /**
-     * Gets the active MinecraftServer instance.
-     * @returns 
-     */
-    public getServer() {
-        return this.server
-    }
+    public async connect() {
+        Logger.info("[ForgeMinecraft] Connecting to management server...")
 
-    /**
-     * Returns whether a connection exists.
-     * @returns 
-     */
-    public isConnected() {
-        return !!this.connection
-    }
+        const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options
+        const connection = await WebSocketConnection.connect(`ws://${host}:${port}`, token, {
+            reconnect,
+            reconnect_interval: reconnectInterval,
+            max_reconnects: maxReconnectAttempts
+        }).catch(() => undefined)
 
-    /**
-     * Starts/Restarts the connection loop.
-     * @returns 
-     */
-    public start() {
-        if (this.connection || this.reconnectTimer) return
-        void this._connect()
-    }
-
-    /**
-     * Stops reconnecting and closes the connection.
-     * @returns 
-     */
-    public stop() {
-        if (this.reconnectTimer) {
-            clearTimeout(this.reconnectTimer)
-            delete this.reconnectTimer
+        if (!connection) {
+            Logger.warn("[ForgeMinecraft] Management connection could not be established.")
+            return
         }
 
-        if (this.connection) {
-            this.connection.close()
-            delete this.connection
-        }
+        this.connection = connection
+        this.server = new MinecraftServer(connection)
 
-        delete this.server
+        this._attachSocketListeners(connection)
+        this._attachServerListeners(this.server)
+
+        this.emit("connected", this.server)
     }
 
-    /**
-     * Establishes a connection to the server.
-     * @returns 
-     */
-    private async _connect() {
-        try {
-            Logger.info("[ForgeMinecraft] Connecting to management server...")
-
-            const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options
-            const connection = await WebSocketConnection.connect(`ws://${host}:${port}`, token, {
-                reconnect,
-                reconnect_interval: reconnectInterval,
-                max_reconnects: maxReconnectAttempts
-            }).catch(() => { })
-
-            if (!connection) {
-                Logger.warn("[ForgeMinecraft] Management connection could not be established.")
-                return this._scheduleReconnect()
-            }
-
-            this.connection = connection
-            this.server = new MinecraftServer(this.connection)
-
+    private _attachSocketListeners(connection: WebSocketConnection) {
+        connection.on("open", () => {
             Logger.info("[ForgeMinecraft] Management connection established.")
-            this.emit("connected", this.server)
+        })
 
-            this.connection.on("close", () => {
-                Logger.warn("[ForgeMinecraft] Management connection closed.")
-                this._cleanup()
-                this.emit("disconnected")
-                this._scheduleReconnect()
-            })
+        connection.on("close", () => {
+            Logger.warn("[ForgeMinecraft] Management connection closed.")
+            this.server = undefined
+            this.emit("disconnected")
+        })
 
-            this.connection.on("error", (err) => {
-                Logger.debug("[ForgeMinecraft] Management socket error:", err.message)
+        connection.on("max_reconnects_reached", () => {
+            Logger.warn("[ForgeMinecraft] Maximum reconnect attempts reached. Connection closed.")
+        })
+
+        connection.on("error", (err) => {
+            Logger.debug("[ForgeMinecraft] Management socket error:", err.message)
+        })
+    }
+
+    private _attachServerListeners(server: MinecraftServer) {
+        const events: Array<[keyof EventData, keyof IMinecraftEvents]> = [
+            ["error", "error"],
+            [Notifications.ALLOWLIST_ADDED, "allowListAdded"],
+            [Notifications.ALLOWLIST_REMOVED, "allowListRemoved"],
+            [Notifications.BAN_ADDED, "banAdded"],
+            [Notifications.BAN_REMOVED, "banRemoved"],
+            [Notifications.GAME_RULE_UPDATED, "gameRuleUpdated"],
+            [Notifications.IP_BAN_ADDED, "ipBanAdded"],
+            [Notifications.IP_BAN_REMOVED, "ipBanRemoved"],
+            [Notifications.OPERATOR_ADDED, "operatorAdded"],
+            [Notifications.OPERATOR_REMOVED, "operatorRemoved"],
+            [Notifications.PLAYER_JOINED, "playerJoined"],
+            [Notifications.PLAYER_LEFT, "playerLeft"],
+            [Notifications.SERVER_ACTIVITY, "serverActivity"],
+            [Notifications.SERVER_SAVED, "serverSaved"],
+            [Notifications.SERVER_SAVING, "serverSaving"],
+            [Notifications.SERVER_STARTED, "serverStarted"],
+            [Notifications.SERVER_STATUS, "serverStatus"],
+            [Notifications.SERVER_STOPPING, "serverStopping"]
+        ]
+
+        for (const [event, targetEvent] of events) {
+            server.on(event, (...data) => { 
+                this.emitter.emit(targetEvent, ...data)
             })
-        } catch (err) {
-            Logger.error("[ForgeMinecraft] Management connect failed:", err)
-            this._scheduleReconnect()
         }
-    }
-
-    /**
-     * Cleans everything up.
-     * @returns 
-     */
-    private _cleanup() {
-        delete this.connection
-        delete this.server
-    }
-
-    /**
-     * Schedules a reconnect to the server.
-     * @returns 
-     */
-    private _scheduleReconnect() {
-        if (this.reconnectTimer) return
-        const interval = this.options.reconnectInterval!
-
-        Logger.info(`[ForgeMinecraft] Reconnecting in ${interval / 1000}s...`)
-
-        this.reconnectTimer = setTimeout(() => {
-            delete this.reconnectTimer
-            void this._connect()
-        }, interval)
     }
 }

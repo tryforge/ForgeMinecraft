@@ -6,6 +6,7 @@ import { description, version } from "../package.json"
 import { MinecraftCommandManager, MinecraftConnectionManager } from "./managers"
 import { ForgeMinecraftEventHandlerName } from "./constants"
 import { IMinecraftEvents } from "./handlers"
+import resolveStatus from "./functions/resolveStatus"
 
 export interface IManagementServerOptions {
     /**
@@ -100,9 +101,9 @@ export class ForgeMinecraft extends ForgeExtension {
     version = version
 
     public server?: MinecraftServer
-    public connection?: WebSocketConnection
     public commands!: MinecraftCommandManager
 
+    private manager?: MinecraftConnectionManager
     private emitter = new TypedEmitter<TransformEvents<IMinecraftEvents>>()
 
     public constructor(public readonly options: IForgeMinecraftOptions = {}) {
@@ -116,11 +117,7 @@ export class ForgeMinecraft extends ForgeExtension {
      * @returns 
      */
     public async getJavaStatus(host?: string | null, port?: number) {
-        host ||= this.options.java?.host
-        port ??= this.options.java?.port
-
-        if (!host) return null
-        return await statusJava(host, port)
+        return resolveStatus(statusJava, this.options.java, host, port)
     }
 
     /**
@@ -130,80 +127,25 @@ export class ForgeMinecraft extends ForgeExtension {
      * @returns 
      */
     public async getBedrockStatus(host?: string | null, port?: number) {
-        host ||= this.options.bedrock?.host
-        port ??= this.options.bedrock?.port
-
-        if (!host) return null
-        return await statusBedrock(host, port)
+        return resolveStatus(statusBedrock, this.options.bedrock, host, port)
     }
 
     public async init(client: ForgeClient) {
-        ForgeClient.prototype.minecraft = this
-
+        client.minecraft = this
         this.commands = new MinecraftCommandManager(client)
 
         if (this.options.server) {
-            Logger.info("[ForgeMinecraft] Connecting to management server...")
+            this.manager = new MinecraftConnectionManager(this.options.server, this.emitter)
 
-            const { host, port, token, reconnect, reconnectInterval, maxReconnectAttempts } = this.options.server
-            const connection = await WebSocketConnection.connect(`ws://${host}:${port}`, token, {
-                reconnect,
-                reconnect_interval: reconnectInterval,
-                max_reconnects: maxReconnectAttempts
-            }).catch(() => { })
+            this.manager.on("connected", (server) => {
+                this.server = server
+            })
 
-            if (connection) {
-                this.connection = connection
-                this.server = new MinecraftServer(connection)
-                Logger.info("[ForgeMinecraft] Management connection established.")
+            this.manager.on("disconnected", () => {
+                this.server = undefined
+            })
 
-                const attachListeners = () => {
-                    const listen = (event: any, targetEvent: keyof IMinecraftEvents = event) => {
-                        this.server!.on(event, (data) => this.emitter.emit(targetEvent, data))
-                    }
-
-                    listen("error")
-                    listen(Notifications.ALLOWLIST_ADDED, "allowListAdded")
-                    listen(Notifications.ALLOWLIST_REMOVED, "allowListRemoved")
-                    listen(Notifications.BAN_ADDED, "banAdded")
-                    listen(Notifications.BAN_REMOVED, "banRemoved")
-                    listen(Notifications.GAME_RULE_UPDATED, "gameRuleUpdated")
-                    listen(Notifications.IP_BAN_ADDED, "ipBanAdded")
-                    listen(Notifications.IP_BAN_REMOVED, "ipBanRemoved")
-                    listen(Notifications.OPERATOR_ADDED, "operatorAdded")
-                    listen(Notifications.OPERATOR_REMOVED, "operatorRemoved")
-                    listen(Notifications.PLAYER_JOINED, "playerJoined")
-                    listen(Notifications.PLAYER_LEFT, "playerLeft")
-                    listen(Notifications.SERVER_ACTIVITY, "serverActivity")
-                    listen(Notifications.SERVER_SAVED, "serverSaved")
-                    listen(Notifications.SERVER_SAVING, "serverSaving")
-                    listen(Notifications.SERVER_STARTED, "serverStarted")
-                    listen(Notifications.SERVER_STATUS, "serverStatus")
-                    listen(Notifications.SERVER_STOPPING, "serverStopping")
-                }
-
-                if (client.isReady() as boolean) attachListeners()
-                else client.once("clientReady", attachListeners)
-
-                connection.on("open", () => {
-                    Logger.info("[ForgeMinecraft] Management connection established.")
-                })
-
-                connection.on("close", () => {
-                    Logger.warn("[ForgeMinecraft] Management connection closed.")
-                    Logger.info("[ForgeMinecraft] Reconnecting to management server...")
-                })
-
-                connection.on("max_reconnects_reached", () => {
-                    Logger.warn("[ForgeMinecraft] Maximum reconnect attempts reached. Management connection closed.")
-                })
-
-                connection.on("error", (err) => {
-                    Logger.debug("[ForgeMinecraft] Management socket error:", err.message)
-                })
-            } else {
-                Logger.warn("[ForgeMinecraft] Management connection could not be established.")
-            }
+            await this.manager.connect()
         }
 
         EventManager.load(ForgeMinecraftEventHandlerName, __dirname + `/events`)
