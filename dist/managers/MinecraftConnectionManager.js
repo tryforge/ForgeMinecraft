@@ -21,7 +21,7 @@ class MinecraftConnectionManager extends tiny_typed_emitter_1.TypedEmitter {
             reconnect,
             reconnect_interval: reconnectInterval,
             max_reconnects: maxReconnectAttempts
-        }).catch((err) => forgescript_1.Logger.debug("[ForgeMinecraft] Management socket error:", err.message));
+        }).catch((err) => forgescript_1.Logger.debug("[ForgeMinecraft] Management socket error:", err));
         if (!connection) {
             forgescript_1.Logger.warn("[ForgeMinecraft] Management connection could not be established.");
             return;
