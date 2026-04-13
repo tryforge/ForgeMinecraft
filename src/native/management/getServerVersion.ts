@@ -8,7 +8,7 @@ export enum VersionProperty {
 export default new NativeFunction({
     name: "$getServerVersion",
     version: "1.0.0",
-    description: "Returns current version of the minecraft server",
+    description: "Returns current version of the java minecraft server",
     unwrap: true,
     brackets: false,
     args: [

@@ -29,7 +29,7 @@ export class MinecraftConnectionManager extends TypedEmitter<IConnectionEvents> 
             reconnect,
             reconnect_interval: reconnectInterval,
             max_reconnects: maxReconnectAttempts
-        }).catch(() => undefined)
+        }).catch((err) => Logger.debug("[ForgeMinecraft] Management socket error:", err.message))
 
         if (!connection) {
             Logger.warn("[ForgeMinecraft] Management connection could not be established.")

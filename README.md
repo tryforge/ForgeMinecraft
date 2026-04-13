@@ -62,6 +62,9 @@ ForgeMinecraft is an extension that provides real-time Minecraft server manageme
 
 <h3 align="center">Management Server</h3><hr>
 
+> ℹ️ **Note**\
+> The management server protocol is supported exclusively on Minecraft Java Edition and is not available for Bedrock servers.
+
 Minecraft’s management server protocol, introduced in **1.21.9**, enables remote management and monitoring of your Minecraft server. It allows this extension to connect to the server, execute administrative actions, and receive real-time events such as player activity, server status changes, and configuration updates, making automation and server control easier.
 
 #### Setting up the Minecraft Server
