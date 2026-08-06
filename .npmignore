@@ -1,8 +1,10 @@
 */__tests__/
 docs/
 src/
+assets/
 metadata/
 .vscode/
 .github/
 .env
 tsconfig.json
+typedoc.json

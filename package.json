@@ -17,11 +17,11 @@
   "license": "LGPL-3.0-or-later",
   "devDependencies": {
     "@tryforge/forgescript": "^2.6.0",
-    "typedoc": "^0.28.18",
-    "typescript": "^6.0.2"
+    "typedoc": "^0.28.20",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "mc-server-management": "^3.2.1",
+    "mc-server-management": "^3.2.2",
     "node-mcstatus": "^1.2.1",
     "tiny-typed-emitter": "^2.1.0"
   }
